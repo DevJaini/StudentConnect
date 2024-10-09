@@ -1,0 +1,31 @@
+.signIn form div {
+  display: flex;
+}
+.signIn input {
+  margin-bottom: 20px;
+  margin-right: 10px;
+}
+.signIn form {
+  padding: 30px;
+}
+
+.center {
+  text-align: center;
+}
+
+.signIn-container .container {
+  max-width: 35%;
+}
+
+@media screen and (max-width: 768px) {
+  .signIn h4 {
+    width: 100%;
+    margin-bottom: 30px;
+  }
+  .signIn form div {
+    flex-direction: column;
+  }
+  .signIn input {
+    width: 100%;
+  }
+}
