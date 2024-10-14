@@ -13,6 +13,13 @@ export const signUp = async (req, res) => {
         .json({ error: "Email and password are required!" });
     }
 
+    // Check if email is a student email
+    if (!email.endsWith(".edu")) {
+      return res
+        .status(400)
+        .json({ message: "Invalid email domain. Use your student email." });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const { data, error } = await supabase

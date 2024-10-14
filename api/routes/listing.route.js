@@ -1,4 +1,5 @@
 import express from "express";
+import { authenticate } from "../middleware/jwt.middleware.js";
 import {
   addListing,
   viewListings,
@@ -9,10 +10,10 @@ import {
 
 const router = express.Router();
 
-router.post("/add", addListing);
-router.get("/view/:id", viewListings);
-router.get("/view/all", viewAllListings);
-router.put("/update/:id", updateListing);
-router.delete("/archive/:id", archiveListing);
+router.post("/add", authenticate, addListing);
+router.get("/view/:id", authenticate, viewListings);
+router.get("/view/all", authenticate, viewAllListings);
+router.put("/update/:id", authenticate, updateListing);
+router.delete("/archive/:id", authenticate, archiveListing);
 
 export default router;
