@@ -7,10 +7,11 @@ import {
   updateListing,
   archiveListing,
 } from "../controllers/user.controller.js";
+import { validateListing } from "../validations/listing.middleware.js";
 
 const router = express.Router();
 
-router.post("/add", authenticate, addListing);
+router.post("/add", authenticate, validateListing, addListing);
 router.get("/view/:id", authenticate, viewListings);
 router.get("/view/all", authenticate, viewAllListings);
 router.put("/update/:id", authenticate, updateListing);

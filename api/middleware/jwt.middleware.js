@@ -32,8 +32,9 @@ export const authenticate = (req, res, next) => {
 export const generateToken = (user) => {
   // Payload can contain the student ID or other necessary user information
   const payload = {
-    username: user.email,
+    userId: user.id,
     email: user.email,
+    username: user.username,
   };
 
   // Sign the JWT token using the secret key and an expiry time

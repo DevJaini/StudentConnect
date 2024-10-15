@@ -1,36 +1,22 @@
 import { supabase } from "../config/supabase.config.js";
 
 export const addListing = async (req, res) => {
-  const {
-    location,
-    title,
-    description,
-    price,
-    school,
-    type_of_house,
-    facilities,
-    images,
-    offers,
-    fees_policies,
-    user_id,
-  } = req.body;
+  // const {
+  //   location,
+  //   title,
+  //   description,
+  //   price,
+  //   school,
+  //   type_of_house,
+  //   facilities,
+  //   images,
+  //   offers,
+  //   fees_policies,
+  //   user_id,
+  // } = req.body;
 
   try {
-    const { data, error } = await supabase.from("listings").insert([
-      {
-        location,
-        title,
-        description,
-        price,
-        school,
-        type_of_house,
-        facilities,
-        images,
-        offers,
-        fees_policies,
-        user_id,
-      },
-    ]);
+    const { data, error } = await supabase.from("listings").insert([req.body]);
 
     if (error) {
       return res.status(400).json({ error: error.message });
@@ -45,6 +31,10 @@ export const viewListings = async (req, res) => {
   const { id } = req.params;
 
   try {
+    if (!id) {
+      return res.status(400).json({ error: "Listing Id is required!" });
+    }
+
     const { data, error } = await supabase
       .from("listings")
       .select("*")
@@ -78,6 +68,10 @@ export const updateListing = async (req, res) => {
   const updates = req.body;
 
   try {
+    if (!id) {
+      return res.status(400).json({ error: "Listing Id is required!" });
+    }
+
     const { data, error } = await supabase
       .from("listings")
       .update(updates)
@@ -96,6 +90,9 @@ export const archiveListing = async (req, res) => {
   const { id } = req.params;
 
   try {
+    if (!id) {
+      return res.status(400).json({ error: "Listing Id is required!" });
+    }
     const { data, error } = await supabase
       .from("listings")
       .delete()

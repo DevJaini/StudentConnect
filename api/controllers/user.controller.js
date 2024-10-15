@@ -7,17 +7,14 @@ export const signUp = async (req, res) => {
   const { username, email, password } = req.body;
 
   try {
-    if (!email || !password) {
-      return res
-        .status(400)
-        .json({ error: "Email and password are required!" });
-    }
+    const { data: user } = await supabase
+      .from("users")
+      .select("*")
+      .eq("email", email)
+      .single();
 
-    // Check if email is a student email
-    if (!email.endsWith(".edu")) {
-      return res
-        .status(400)
-        .json({ message: "Invalid email domain. Use your student email." });
+    if (user) {
+      return res.status(400).json({ error: "User already exists" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -41,12 +38,6 @@ export const signIn = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    if (!email || !password) {
-      return res
-        .status(400)
-        .json({ error: "Email and password are required!" });
-    }
-
     const { data: user, error } = await supabase
       .from("users")
       .select("*")
@@ -76,6 +67,10 @@ export const getProfile = async (req, res) => {
   const email = req.user.email;
 
   try {
+    if (!email) {
+      return res.status(400).json({ error: "Email is required!" });
+    }
+
     const { data, error } = await supabase
       .from("users")
       .select("*")
