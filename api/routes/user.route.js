@@ -6,14 +6,14 @@ import {
   getProfile,
 } from "../controllers/user.controller.js";
 import {
-  validateSignUpSignUp,
-  validateSignInSignUp,
+  validateSignUp,
+  validateSignIn,
 } from "../validations/user.middleware.js";
 
 const router = express.Router();
 
-router.post("/signup", validateSignUpSignUp, signUp);
-router.post("/signin", validateSignInSignUp, signIn);
+router.post("/signup", validateSignUp, signUp);
+router.post("/signin", validateSignIn, signIn);
 router.post("/getProfile", getProfile);
 router.post("/signin/google", googleSignIn);
 

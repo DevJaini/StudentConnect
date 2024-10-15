@@ -6,7 +6,7 @@ import {
   viewAllListings,
   updateListing,
   archiveListing,
-} from "../controllers/user.controller.js";
+} from "../controllers/listing.controller.js";
 import { validateListing } from "../validations/listing.middleware.js";
 
 const router = express.Router();

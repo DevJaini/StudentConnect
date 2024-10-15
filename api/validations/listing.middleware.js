@@ -1,7 +1,7 @@
-const Joi = require("joi");
-const { validateRequest } = require("../middleware/validate.middleware.js");
+import Joi from "joi";
+import validateRequest from "../middleware/validate.middleware.js"; // Assuming this is a named export
 
-// Define the student sign-up schema
+// Define the listing validation schema
 const listingSchema = Joi.object({
   location: Joi.string().required().messages({
     "string.empty": "Location is required",
@@ -33,8 +33,4 @@ const listingSchema = Joi.object({
 });
 
 // Export middleware using common validation
-const validateListing = validateRequest(listingSchema);
-
-module.exports = {
-  validateListing,
-};
+export const validateListing = validateRequest(listingSchema); // Named export

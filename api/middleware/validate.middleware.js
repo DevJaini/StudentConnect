@@ -12,6 +12,5 @@ const validateRequest = (schema) => {
   };
 };
 
-module.exports = {
-  validateRequest,
-};
+// Export the validateRequest function using ES6 syntax
+export default validateRequest; // This exports validateRequest as the default export

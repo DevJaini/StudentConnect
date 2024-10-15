@@ -1,4 +1,4 @@
-import { supabase } from "../config/supabase.config.js";
+import { supabase } from "../database/supabase.config.js";
 
 export const addListing = async (req, res) => {
   // const {

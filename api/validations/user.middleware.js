@@ -1,5 +1,5 @@
-const Joi = require("joi");
-const { validateRequest } = require("../middleware/validate.middleware.js");
+import Joi from "joi"; // Use ES6 import for Joi
+import validateRequest from "../middleware/validate.middleware.js";
 
 // Define the student sign-up schema
 const signUpSchema = Joi.object({
@@ -37,10 +37,5 @@ const signInSchema = Joi.object({
 });
 
 // Export middleware using common validation
-const validateSignUpSignUp = validateRequest(signUpSchema);
-const validateSignInSignUp = validateRequest(signInSchema);
-
-module.exports = {
-  validateSignUpSignUp,
-  validateSignInSignUp,
-};
+export const validateSignUp = validateRequest(signUpSchema);
+export const validateSignIn = validateRequest(signInSchema);
