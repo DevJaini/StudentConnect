@@ -3,11 +3,15 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import userRoute from "./routes/user.route.js";
 import listingRoute from "./routes/listing.route.js";
+import bodyParser from "body-parser";
 import dotenv from "dotenv";
 
 dotenv.config();
 
 const app = express();
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 app.use(express.json());
