@@ -1,36 +1,41 @@
 import React, { useState } from "react";
 import "./signIn.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "../../supabase/supabaseClient";
+import { signIn } from "../../api/user.js";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [loading, setLoading] = useState(false); // State for loading indicator
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   // Function to handle email/password sign in
   const handleSignIn = async (e) => {
-    e.preventDefault(); // Prevent default form submission
+    e.preventDefault();
 
-    setLoading(true); // Set loading to true
-    setErrorMessage(""); // Reset error message
+    setLoading(true);
+    setErrorMessage("");
 
-    const { user, error } = await supabase.auth.signIn({
+    console.log(email, password);
+    const { user, error } = await signIn({
       email,
       password,
     });
 
-    setLoading(false); // Reset loading to false
+    setLoading(false);
 
     if (error) {
-      setErrorMessage(error.message); // Set error message
+      setErrorMessage(error.message);
       console.error("Error signing in:", error);
+
       return;
     }
 
     console.log("User:", user);
-    // Redirect to dashboard or handle successful sign-in
+
+    navigate("/");
   };
 
   // Function to handle Google sign-in
@@ -45,7 +50,7 @@ const SignIn = () => {
     }
 
     console.log("User:", user);
-    // Redirect to dashboard or handle successful sign-in
+    navigate("/");
   };
 
   return (
