@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import { generateToken } from "../middleware/jwt.middleware.js";
 import { sendOTPEmail } from "../services/otp.service.js";
 
+// Sign Up Controller
 export const signUp = async (req, res) => {
   const { username, email, password } = req.body;
 
@@ -21,7 +22,7 @@ export const signUp = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from("users")
       .insert([{ username, email, password: hashedPassword }]);
 
@@ -29,7 +30,7 @@ export const signUp = async (req, res) => {
       return res.status(400).json({ error: error.message });
     }
 
-    res.status(200).json({ message: "Account created successfully!", data });
+    res.status(200).json({ message: "Account created successfully!" });
   } catch (err) {
     res.status(500).json({
       error: "An internal server error occurred. Please try again later.",
@@ -66,6 +67,7 @@ export const signIn = async (req, res) => {
     }
 
     user.token = generateToken(user);
+    delete user.password;
 
     res.status(200).json({ message: "Logged in successfully!", user });
   } catch (err) {
@@ -78,7 +80,7 @@ export const signIn = async (req, res) => {
 
 // Get User Profile Controller
 export const getProfile = async (req, res) => {
-  const id = req.user.id;
+  const id = req.user.userId;
 
   try {
     if (!id) {
@@ -98,6 +100,8 @@ export const getProfile = async (req, res) => {
         .status(404)
         .json({ error: "User profile not found. Please check your details." });
     }
+
+    delete data.password;
 
     res.status(200).json(data);
   } catch (err) {
@@ -135,7 +139,7 @@ export const forgotPassword = async (req, res) => {
 
 // Reset Password Controller
 export const resetPassword = async (req, res) => {
-  const { email, newPassword } = req.body;
+  const { email, password } = req.body;
 
   try {
     const { data: user, error } = await supabase
@@ -150,8 +154,7 @@ export const resetPassword = async (req, res) => {
       });
     }
 
-    // Hash the new password
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     // Update the password in the database
     const { error: updateError } = await supabase
@@ -186,7 +189,6 @@ export const googleSignIn = async (req, res) => {
       .status(200)
       .json({ message: "Successfully signed in with Google!", session: data });
   } catch (err) {
-    console.error("Google Sign In Error:", err);
     res.status(500).json({
       error: "An internal server error occurred. Please try again later.",
       details: err.message,

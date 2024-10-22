@@ -3,9 +3,9 @@ import nodemailer from "nodemailer";
 
 // Configure Nodemailer transporter
 const transporter = nodemailer.createTransport({
-  host: "smtp.example.com", // Replace with your SMTP server
-  port: 587, // Usually 587 for TLS or 465 for SSL
-  secure: false, // true for 465, false for other ports
+  host: "smtp.gmail.com", // Replace with your SMTP server
+  port: 465, // Usually 587 for TLS or 465 for SSL
+  secure: true, // true for 465, false for other ports
   auth: {
     user: process.env.SMTP_EMAIL, // Your email
     pass: process.env.SMTP_PASSWORD, // Your email password
@@ -23,10 +23,9 @@ export const sendEmail = async (to, subject, text) => {
     };
 
     const info = await transporter.sendMail(mailOptions);
-    console.log("Email sent: %s", info.messageId);
+    // console.log("Email sent: %s", info.messageId);
     return info;
   } catch (error) {
-    console.error("Error sending email:", error);
     throw new Error("Email sending failed");
   }
 };

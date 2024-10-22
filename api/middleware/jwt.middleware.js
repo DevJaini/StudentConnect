@@ -13,14 +13,13 @@ export const authenticate = (req, res, next) => {
     // Verify the token using the secret key
     jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
       if (err) {
-        logger.error(`Authentication failed: ${err.message}`);
         return res
           .status(401)
           .json({ error: "Authentication token is invalid" });
       }
 
       // Attach decoded token to request (could contain student info)
-      req.decoded = decoded;
+      req.user = decoded;
       next();
     });
   } else {

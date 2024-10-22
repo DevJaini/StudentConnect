@@ -1,5 +1,6 @@
 // otp.service.js
 import crypto from "crypto";
+import { sendEmail } from "./transporter.service.js";
 
 // Function to generate a secure OTP
 export const generateSecureOTP = () => {
@@ -12,17 +13,15 @@ export const sendOTPEmail = async (to) => {
   const otp = generateSecureOTP();
 
   // Optionally, send the OTP via email using the sendEmail function from transporter.service.js
-  const { sendEmail } = require("./transporter.service");
 
   try {
     await sendEmail(
       to,
       "Your Password Reset One Time Password(OTP) Code",
-      `Your One Time Password(OTP) for password reset is: ${otp}. Don't share this OTP with anyone`
+      `Your One Time Password(OTP) for password reset is: ${otp}. Don't share this OTP with anyone.`
     );
     return otp; // Return OTP if needed for further verification
   } catch (error) {
-    console.error("Error sending OTP email:", error);
     throw new Error("OTP sending failed");
   }
 };
