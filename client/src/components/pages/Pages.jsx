@@ -4,6 +4,7 @@ import Header from "../common/header/Header";
 import Home from "../home/Home";
 import SignUp from "../signUp/SignUp";
 import SignIn from "../signIn/SignIn";
+import ForgotPassword from "../forgotPassword/forgotPassword";
 import Footer from "../common/footer/Footer";
 
 const Pages = () => {
@@ -17,6 +18,7 @@ const Pages = () => {
         <Route path="/" element={<Home />} />
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/signIn" element={<SignIn />} />
+        <Route path="/forgotPassword" element={<ForgotPassword />} />
       </Routes>
 
       {/* Render the Footer outside of the Routes */}

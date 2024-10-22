@@ -17,8 +17,8 @@ import {
 
 const router = express.Router();
 
-router.post("/signup", validateSignUp, signUp);
-router.post("/signin", validateSignIn, signIn);
+router.post("/signUp", validateSignUp, signUp);
+router.post("/signIn", validateSignIn, signIn);
 router.get("/getProfile", authenticate, getProfile);
 router.post(
   "/forgotPassword",
