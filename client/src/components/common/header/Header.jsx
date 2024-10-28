@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import "./header.css";
 import { Link } from "react-router-dom";
+import { useUser } from "../../../context/userContext.js"; // Import useUser hook
+import "./header.css";
 
 const Header = () => {
+  const { user } = useUser(); // Access user info from context
   const [navList, setNavList] = useState(false);
 
   return (
@@ -10,39 +12,61 @@ const Header = () => {
       <header className="header a">
         <div className="container flex">
           <div className="logo">
-            {/* <img src='./images/logo.png' alt='' /> */}
             <h1 className="color">
-              <Link to="/"> StudentConnect</Link>
+              <Link to="/">StudentConnect</Link>
             </h1>
           </div>
 
           <div className="button flex">
-            <button className="btn1">
-              <i className="fa fa-sign-in">
-                <Link
-                  to="/signUp"
+            {user ? ( // Check if user is logged in
+              <>
+                <h3
                   style={{
-                    color: "white",
+                    color: "#27ae60",
                     fontFamily: "Poppins",
+                    marginRight: "15px",
                   }}
                 >
-                  Sign Up
-                </Link>
-              </i>
-            </button>
-            <button className="btn1">
-              <i className="fa fa-sign-in">
-                <Link
-                  to="/signIn"
-                  style={{
-                    color: "white",
-                    fontFamily: "Poppins",
-                  }}
-                >
-                  Sign In
-                </Link>
-              </i>
-            </button>
+                  Hello, {user.username} {/* Display username */}
+                </h3>{" "}
+                <button className="btn1">
+                  <Link
+                    to="/signOut"
+                    style={{
+                      color: "white",
+                      fontFamily: "Poppins",
+                    }}
+                  >
+                    Sign Out
+                  </Link>
+                </button>
+              </>
+            ) : (
+              <>
+                <button className="btn1">
+                  <Link
+                    to="/signUp"
+                    style={{
+                      color: "white",
+                      fontFamily: "Poppins",
+                    }}
+                  >
+                    Sign Up
+                  </Link>
+                </button>
+                <button className="btn1">
+                  <Link
+                    to="/signIn"
+                    style={{
+                      color: "white",
+                      fontFamily: "Poppins",
+                    }}
+                  >
+                    Sign In
+                  </Link>
+                </button>
+              </>
+            )}
           </div>
 
           <div className="toggle">

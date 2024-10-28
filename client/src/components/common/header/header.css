@@ -10,13 +10,12 @@ header img {
   width: 170px;
 }
 header a {
-  margin-left: 10px;
   transition: 0.5s;
   font-weight: 500;
   font: inherit;
 }
 header button {
-  padding: 15px 15px;
+  padding: 5px 10px;
   margin: 5px;
   font-family: "Times New Roman", Times, serif;
 }

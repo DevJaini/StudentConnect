@@ -20,18 +20,8 @@ const router = express.Router();
 router.post("/signUp", validateSignUp, signUp);
 router.post("/signIn", validateSignIn, signIn);
 router.get("/getProfile", authenticate, getProfile);
-router.post(
-  "/forgotPassword",
-  authenticate,
-  validateForgotPassword,
-  forgotPassword
-);
-router.put(
-  "/resetPassword",
-  authenticate,
-  validateResetPassword,
-  resetPassword
-);
+router.post("/forgotPassword", validateForgotPassword, forgotPassword);
+router.put("/resetPassword", validateResetPassword, resetPassword);
 router.post("/signin/google", googleSignIn);
 
 export default router;

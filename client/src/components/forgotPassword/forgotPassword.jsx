@@ -1,81 +1,181 @@
 import React, { useState } from "react";
-import "./forgotPassword.css"; // Optional: Create this CSS file for custom styling
-import { Link } from "react-router-dom";
-import { forgotPassword } from "../../api/user.js"; // Assuming you have this function in your API
+import "./forgotPassword.css";
+import { Link, useNavigate } from "react-router-dom";
+import { forgotPassword, resetPassword } from "../../api/user.js"; // Import backend API functions
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
+  const [otp, setOtp] = useState("");
+  const [password, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState(""); // New state for confirming the password
+  const [generatedOtp, setGeneratedOtp] = useState(""); // Store OTP from the API response
+  const [step, setStep] = useState(1); // To handle step in the process (1: Email, 2: OTP, 3: Reset Password)
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  // Function to handle forgot password form submission
-  const handleForgotPassword = async (e) => {
-    e.preventDefault(); // Prevent form from submitting the default way
-
+  // Function to handle sending OTP to email
+  const handleSendOTP = async (e) => {
+    e.preventDefault();
     setLoading(true);
     setErrorMessage("");
     setSuccessMessage("");
 
     try {
-      // Call the API function to send the reset email or OTP
-      const { error } = await forgotPassword(email); // This could be an API or Supabase function
-
+      const response = await forgotPassword({ email }); // Call API to send OTP
       setLoading(false);
 
-      if (error) {
-        setErrorMessage(error.message);
-        console.error("Error sending reset email:", error);
+      if (response.error) {
+        setErrorMessage(response.error);
         return;
       }
 
-      // If successful, show a success message
-      setSuccessMessage(
-        "Password reset email sent successfully! Please check your inbox."
-      );
+      setGeneratedOtp(response.otp); // Store the OTP from the backend response
+      setSuccessMessage("OTP sent to your email.");
+      setStep(2); // Move to the next step (OTP verification)
     } catch (error) {
       setLoading(false);
-      setErrorMessage("Something went wrong. Please try again.");
-      console.error("Error:", error);
+      setErrorMessage("Error sending OTP. Please try again.");
+    }
+  };
+
+  // Function to verify OTP (Frontend OTP verification)
+  const handleVerifyOTP = (e) => {
+    e.preventDefault();
+    setErrorMessage("");
+    setSuccessMessage("");
+
+    if (otp === generatedOtp) {
+      setSuccessMessage("OTP verified! You can now reset your password.");
+      setStep(3); // Move to the next step (Reset password)
+    } else {
+      setErrorMessage("Invalid OTP. Please try again.");
+    }
+  };
+
+  // Function to reset password
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setErrorMessage("");
+    setSuccessMessage("");
+
+    // Check if password and confirmPassword match
+    if (password !== confirmPassword) {
+      setLoading(false);
+      setErrorMessage("Passwords do not match. Please try again.");
+      return;
+    }
+
+    try {
+      const response = await resetPassword({
+        email,
+        password,
+        confirmPassword,
+      }); // Call API to reset password
+      setLoading(false);
+
+      if (response.error) {
+        setErrorMessage(response.error);
+        return;
+      }
+
+      setSuccessMessage("Password successfully reset. You can now log in.");
+      navigate("/signIn"); // Redirect to sign-in page after successful password reset
+    } catch (error) {
+      setLoading(false);
+      setErrorMessage("Error resetting password. Please try again.");
     }
   };
 
   return (
-    <>
-      <section className="forgotPassword mb center forgotPassword-container">
-        <div className="container">
-          <form className="shadow" onSubmit={handleForgotPassword}>
+    <section className="forgotPassword mb center forgotPassword-container">
+      <div className="container">
+        {/* Step 1: Enter Email */}
+        {step === 1 && (
+          <form className="shadow" onSubmit={handleSendOTP}>
             <h2 className="color">Forgot your password?</h2>
-            <p>Enter your email address to receive a password reset link.</p>
+            <p>Enter your email to receive an OTP for password reset.</p>
             <br />
             <input
               type="email"
               placeholder="Email Address"
               value={email}
-              onChange={(e) => setEmail(e.target.value)} // Update email state
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
             <br />
-            {errorMessage && (
-              <p style={{ color: "red" }}>{errorMessage}</p>
-            )}{" "}
-            {/* Display error message */}
+            {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
             {successMessage && (
               <p style={{ color: "green" }}>{successMessage}</p>
-            )}{" "}
-            {/* Display success message */}
+            )}
             <button type="submit" disabled={loading}>
-              {loading ? "Sending Reset Email..." : "Send Reset Email"}
+              {loading ? "Sending OTP..." : "Send OTP"}
             </button>
-            <br />
             <br />
             <Link to="/signIn" style={{ textDecoration: "underline" }}>
               Back to Sign In
             </Link>
           </form>
-        </div>
-      </section>
-    </>
+        )}
+
+        {/* Step 2: Enter OTP */}
+        {step === 2 && (
+          <form className="shadow" onSubmit={handleVerifyOTP}>
+            <h2 className="color">Verify OTP</h2>
+            <p>We have sent an OTP to your email. Please enter it below.</p>
+            <br />
+            <input
+              type="text"
+              placeholder="Enter OTP"
+              value={otp}
+              onChange={(e) => setOtp(e.target.value)}
+              required
+            />
+            <br />
+            {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+            {successMessage && (
+              <p style={{ color: "green" }}>{successMessage}</p>
+            )}
+            <button type="submit" disabled={loading}>
+              {loading ? "Verifying OTP..." : "Verify OTP"}
+            </button>
+          </form>
+        )}
+
+        {/* Step 3: Reset Password */}
+        {step === 3 && (
+          <form className="shadow" onSubmit={handleResetPassword}>
+            <h2 className="color">Reset Password</h2>
+            <p>Enter your new password below.</p>
+            <br />
+            <input
+              type="password"
+              placeholder="New Password"
+              value={password}
+              onChange={(e) => setNewPassword(e.target.value)}
+              required
+            />
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+            <br />
+            {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+            {successMessage && (
+              <p style={{ color: "green" }}>{successMessage}</p>
+            )}
+            <button type="submit" disabled={loading}>
+              {loading ? "Resetting Password..." : "Reset Password"}
+            </button>
+          </form>
+        )}
+      </div>
+    </section>
   );
 };
 

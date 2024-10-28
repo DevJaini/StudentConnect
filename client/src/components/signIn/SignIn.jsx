@@ -3,6 +3,7 @@ import "./signIn.css";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "../../supabase/supabaseClient";
 import { signIn } from "../../api/user.js";
+import { useUser } from "../../context/userContext.js";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -10,6 +11,7 @@ const SignIn = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { setUser } = useUser();
 
   // Function to handle email/password sign in
   const handleSignIn = async (e) => {
@@ -34,7 +36,7 @@ const SignIn = () => {
     }
 
     console.log("User:", user);
-
+    setUser({ username: user.username }); // Store username in context
     navigate("/");
   };
 
