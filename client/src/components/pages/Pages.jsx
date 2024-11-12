@@ -7,6 +7,7 @@ import SignUp from "../signUp/SignUp";
 import SignIn from "../signIn/SignIn";
 import ForgotPassword from "../forgotPassword/ForgotPassword.jsx"; // Ensure consistent naming
 import Footer from "../common/footer/Footer";
+import Listings from "../listings/Listings.jsx";
 
 const Pages = () => {
   return (
@@ -23,6 +24,7 @@ const Pages = () => {
           <Route path="/signUp" element={<SignUp />} />
           <Route path="/signIn" element={<SignIn />} />
           <Route path="/forgotPassword" element={<ForgotPassword />} />
+          <Route path="/listings" element={<Listings />} />
         </Routes>
 
         {/* Render the Footer outside of the Routes */}

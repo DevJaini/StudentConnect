@@ -1,0 +1,102 @@
+/* Page Title */
+h1 {
+  font-size: 1.8em;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Filter Section */
+.filter-section {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 15px;
+  margin-bottom: 25px;
+  background-color: #f4f4f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Filter Dropdowns & Input */
+.filter-section select,
+.filter-section input[type="number"] {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  font-size: 1em;
+  min-width: 150px;
+}
+
+.filter-section button {
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 1em;
+  border: none;
+  background-color: #25b579;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.filter-section button:hover {
+  background-color: #1e995b;
+}
+
+/* Property List Grid */
+.property-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  margin: 2%;
+}
+
+/* Property Card Styling */
+.property-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+  text-align: center;
+}
+
+.property-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.property-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-bottom: 1px solid #ddd;
+}
+
+.property-card h3 {
+  font-size: 1.1em;
+  margin: 10px 0 5px;
+  color: #333;
+}
+
+.property-card p {
+  font-size: 0.95em;
+  color: #555;
+  margin: 5px 0;
+}
+
+.property-card p:last-child {
+  font-weight: bold;
+  color: #25b579;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .filter-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

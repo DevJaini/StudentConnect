@@ -1,11 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { list } from "../../data/Data";
 
 const RecentCard = () => {
+  const [visible] = useState(3);
+
+  const navigate = useNavigate(); // Set up navigation
+
+  const handleViewMore = () => {
+    navigate("/listings"); // Redirect to the ListingPage
+  };
+
   return (
     <>
       <div className="content grid3 mtop">
-        {list.map((val, index) => {
+        {list.slice(0, visible).map((val, index) => {
           const { cover, category, location, name, price, type } = val;
           return (
             <div className="box shadow" key={index}>
@@ -26,7 +35,6 @@ const RecentCard = () => {
                   >
                     {category}
                   </span>
-                  <i className="fa fa-heart"></i>
                 </div>
                 <h4>{name}</h4>
                 <p>
@@ -44,6 +52,13 @@ const RecentCard = () => {
           );
         })}
       </div>
+      {visible < list.length && (
+        <div className="view-more-container">
+          <button className="view-more-btn" onClick={handleViewMore}>
+            View More
+          </button>
+        </div>
+      )}
     </>
   );
 };

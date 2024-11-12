@@ -19,3 +19,24 @@
   border-top: 1px solid #e4e8f3;
   padding: 10px 30px;
 }
+
+.view-more-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px; /* Adjust as needed */
+}
+
+.view-more-btn {
+  padding: 10px 100px;
+  font-size: 22px;
+  color: #fff;
+  background-color: #25b579;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.view-more-btn:hover {
+  background-color: #1e9a5a; /* Darker shade on hover */
+}
