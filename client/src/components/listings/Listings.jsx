@@ -1,92 +1,83 @@
 import React, { useState, useEffect } from "react";
-import { list } from "../data/Data"; // Assuming this contains your property listings
+import { viewAllListings } from "../../api/listings"; // Import the viewAllListings function
+import { useUser } from "../../context/userContext"; // Import useUser to access user context
+import { useNavigate } from "react-router-dom";
 import "./listings.css";
 
 const Listings = () => {
-  const [filters, setFilters] = useState({
-    type: "",
-    location: "",
-    maxPrice: "",
-  });
-  const [filteredProperties, setFilteredProperties] = useState(list);
+  const [listings, setProperties] = useState([]);
+  const { user } = useUser();
+  const navigate = useNavigate();
 
-  // Get unique property types and locations from the list for dropdowns
-  const propertyTypes = [...new Set(list.map((property) => property.type))];
-  const locations = [...new Set(list.map((property) => property.location))];
-
-  // Automatically update filteredProperties whenever filters change
   useEffect(() => {
-    const filtered = list.filter((property) => {
-      const matchesType = filters.type ? property.type === filters.type : true;
-      const matchesLocation = filters.location
-        ? property.location.includes(filters.location)
-        : true;
-      const matchesPrice = filters.maxPrice
-        ? property.price <= parseInt(filters.maxPrice)
-        : true;
-      return matchesType && matchesLocation && matchesPrice;
-    });
-    setFilteredProperties(filtered);
-  }, [filters]); // Depend on filters, so it re-runs when filters change
+    const fetchProperties = async () => {
+      try {
+        const fetchedProperties = await viewAllListings();
+        setProperties(fetchedProperties);
+      } catch (error) {
+        console.error("Error fetching properties:", error);
+      }
+    };
+    fetchProperties();
+  }, []);
 
-  // Handle filter changes dynamically
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
+  const handleAddProperty = () => {
+    if (user) {
+      navigate("/addListings");
+    } else {
+      alert("Please log in to add a property.");
+      navigate("/signin");
+    }
+  };
+
+  const handleManageProperties = () => {
+    if (user) {
+      navigate("/manageListing");
+    } else {
+      alert("Please log in to manage your properties.");
+      navigate("/signin");
+    }
   };
 
   return (
     <div>
-      <h1>Apartment Listings ({filteredProperties.length})</h1>
-
-      {/* Dynamic Filter Section */}
-      <div className="filter-section">
-        <select name="type" value={filters.type} onChange={handleFilterChange}>
-          <option value="">All Types</option>
-          {propertyTypes.map((type, index) => (
-            <option key={index} value={type}>
-              {type}
-            </option>
-          ))}
-        </select>
-
-        <select
-          name="location"
-          value={filters.location}
-          onChange={handleFilterChange}
-        >
-          <option value="">All Locations</option>
-          {locations.map((location, index) => (
-            <option key={index} value={location}>
-              {location}
-            </option>
-          ))}
-        </select>
-
-        <input
-          type="number"
-          name="maxPrice"
-          placeholder="Max Price"
-          value={filters.maxPrice}
-          onChange={handleFilterChange}
-        />
-
-        <button
-          onClick={() => setFilters({ type: "", location: "", maxPrice: "" })}
-        >
-          Reset Filters
-        </button>
+      <div className="header-container">
+        <h1 className="color">Apartment Listings</h1>
+        <div className="header-buttons">
+          {user && (
+            <>
+              <button className="header-btn" onClick={handleAddProperty}>
+                Add Property
+              </button>
+              <button className="header-btn" onClick={handleManageProperties}>
+                Manage My Properties
+              </button>
+            </>
+          )}
+        </div>
       </div>
-
-      {/* Property List Section */}
       <div className="property-list">
-        {filteredProperties.map((property, index) => (
-          <div key={index} className="property-card">
-            <img src={property.cover} alt={property.name} />
-            <h3>{property.name}</h3>
-            <p>Type: {property.type}</p>
-            <p>Location: {property.location}</p>
-            <p>Price: ${property.price}</p>
+        {listings.map((listing) => (
+          <div
+            key={listing.id}
+            className="property-card"
+            onClick={() => navigate(`/viewListing/${listing.id}`)}
+          >
+            <div className="image-gallery">
+              {listing.images && listing.images.length > 0 ? (
+                <img
+                  src={listing.images[0]} // Show only the first image
+                  alt={listing.title}
+                  className="listing-images" // Add a class to style the image
+                />
+              ) : (
+                <div className="no-image">No Images Available</div> // Placeholder if no images
+              )}
+            </div>
+            <h3>{listing.title}</h3>
+            <p>Type: {listing.type}</p>
+            <p>Location: {listing.city}</p>
+            <p>Price: ${listing.price}</p>
           </div>
         ))}
       </div>

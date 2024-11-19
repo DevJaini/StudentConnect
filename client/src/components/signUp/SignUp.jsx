@@ -3,7 +3,7 @@ import "./signUp.css";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "../../supabase/supabaseClient";
 import { signUp } from "../../api/user.js"; // Assuming you have a signUp API similar to signIn
-import { useUser } from "../../context/userContext.js";
+// import { useUser } from "../../context/userContext.js";
 
 const SignUp = () => {
   const [username, setUsername] = useState("");
@@ -13,7 +13,7 @@ const SignUp = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { setUser } = useUser();
+  // const { setUser } = useUser();
 
   // Function to handle email/password sign-up
   const handleSignUp = async (e) => {
@@ -28,7 +28,7 @@ const SignUp = () => {
     setLoading(true); // Set loading state to true
     setErrorMessage(""); // Reset error message
 
-    const { user, error } = await signUp({
+    const { error } = await signUp({
       username,
       email,
       password,
@@ -43,8 +43,8 @@ const SignUp = () => {
       return;
     }
 
-    console.log("User:", user);
-    setUser({ username: user.username }); // Store username in context
+    // setUser(user);
+    // Store username in context
     navigate("/"); // Redirect to the home page upon successful sign-up
   };
 

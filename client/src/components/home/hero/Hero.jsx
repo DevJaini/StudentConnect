@@ -17,7 +17,7 @@ const Hero = () => {
               <input type="text" placeholder="College Name" />
             </div>
             <div className="box">
-              <span>Location</span>
+              <span>City</span>
               <input type="text" placeholder="Location" />
             </div>
             <div className="box">

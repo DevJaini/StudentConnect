@@ -36,7 +36,9 @@ const SignIn = () => {
     }
 
     console.log("User:", user);
-    setUser({ username: user.username }); // Store username in context
+    // Store token in localStorage
+    localStorage.setItem("authToken", user.token);
+    setUser(user); // Store username in context
     navigate("/");
   };
 

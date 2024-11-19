@@ -3,8 +3,21 @@ import validateRequest from "../middleware/validate.middleware.js"; // Assuming 
 
 // Define the listing validation schema
 const listingSchema = Joi.object({
-  location: Joi.string().required().messages({
+  city: Joi.string().required().messages({
     "string.empty": "Location is required",
+  }),
+
+  size: Joi.string().required().messages({
+    "string.empty": "Size is required",
+  }),
+  bathrooms: Joi.string().required().messages({
+    "string.empty": "Bathrooms is required",
+  }),
+  state: Joi.string().required().messages({
+    "string.empty": "State is required",
+  }),
+  address: Joi.string().required().messages({
+    "string.empty": "address is required",
   }),
   title: Joi.string().required().messages({
     "string.empty": "Title is required",
@@ -18,18 +31,26 @@ const listingSchema = Joi.object({
     "string.empty": "School is required",
     "string.min": "School must be at least 3 characters long",
   }),
-  type_of_house: Joi.string().valid("shared", "temporary").required().messages({
+  type: Joi.string().required().messages({
     "string.empty": "Type of house is required",
-    "any.only": "Type of house must be one of [temporary, shared]",
   }),
-  images: Joi.array().items(Joi.string().uri()).min(3).messages({
-    "array.base": "Images must be an array of valid URLs",
-    "array.min": "At least 3 images are required",
-    "string.uri": "Each image must be a valid URL",
-  }),
-  user_id: Joi.string().required().messages({
+  images: Joi.optional(),
+
+  // array().items(Joi.string().uri()).min(1).messages({
+  //   "array.base": "Images must be an array of valid URLs",
+  //   "array.min": "At least 3 images are required",
+  //   "string.uri": "Each image must be a valid URL",
+  // }),
+  user_id: Joi.number().required().messages({
     "string.empty": "User ID is required",
   }),
+  description: Joi.optional(),
+  category: Joi.string().required().messages({
+    "string.empty": "category is required",
+  }),
+  facilities: Joi.optional(),
+  offers: Joi.optional(),
+  fees_policies: Joi.optional(),
 });
 
 // Export middleware using common validation

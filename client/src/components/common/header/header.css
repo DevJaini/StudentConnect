@@ -1,3 +1,4 @@
+/* Header Styling */
 header {
   background-color: #fff;
   box-shadow: 0 5px 30px rgb(0 22 84 / 10%);
@@ -6,19 +7,23 @@ header {
   top: 0;
   z-index: 99999;
 }
+
 header img {
   width: 170px;
 }
+
 header a {
   transition: 0.5s;
   font-weight: 500;
   font: inherit;
 }
+
 header button {
   padding: 5px 10px;
   margin: 5px;
   font-family: "Times New Roman", Times, serif;
 }
+
 header span {
   width: auto;
   padding: 0px 6px;
@@ -28,13 +33,17 @@ header span {
   margin-right: 4px;
   font-weight: 400;
 }
+
 header h4 {
   font-weight: 500;
   margin-right: 20px;
 }
+
 header .toggle {
   display: none;
 }
+
+/* Mobile responsive design */
 @media screen and (max-width: 768px) {
   header {
     padding: 0;
@@ -68,4 +77,38 @@ header .toggle {
   .button a {
     color: #fff;
   }
+}
+
+/* Header Button and User Greeting Styles */
+.header .button-group {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.header .user-greeting {
+  color: #27ae60;
+  font-family: "Poppins", sans-serif;
+}
+
+.header .btn {
+  border: none;
+  border-radius: 5px;
+  font-family: "Poppins", sans-serif;
+  cursor: pointer;
+}
+
+.header .btn-signup,
+.header .btn-signin {
+  background-color: #27ae60;
+  color: white;
+}
+
+.header .btn-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.header .btn-link:hover {
+  text-decoration: underline;
 }

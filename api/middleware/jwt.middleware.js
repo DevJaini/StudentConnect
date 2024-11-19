@@ -10,6 +10,8 @@ export const authenticate = (req, res, next) => {
       token = token.slice(7, token.length); // Remove Bearer from string
     }
 
+    console.log("tpoken", token);
+
     // Verify the token using the secret key
     jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
       if (err) {
