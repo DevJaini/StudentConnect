@@ -11,7 +11,7 @@ import Listings from "../listings/Listings.jsx";
 import AddListings from "../listings/addListing/AddListings.jsx";
 import ViewSingleListing from "../listings/viewListing/ViewListing.jsx";
 import ManageListings from "../listings/manageListing/ManageListings.jsx";
-import EditListings from "../listings/editListing/EditListings.jsx";
+import EditListing from "../listings/editListing/EditListings.jsx";
 
 const Pages = () => {
   return (
@@ -31,8 +31,14 @@ const Pages = () => {
           <Route path="/listings" element={<Listings />} />
           <Route path="/addListings" element={<AddListings />} />
           <Route path="/viewListing/:id" element={<ViewSingleListing />} />
-          <Route path="/manageListings/:userId" element={<ManageListings />} />
-          <Route path="/editListings" element={<EditListings />} />
+          <Route path="/manageListings" element={<ManageListings />} />
+          <Route path="/editListing/:id" element={<EditListing />} />
+
+          {/* <Route path="/marketplace" element={<Marketplace />} />
+          <Route path="/addMarketplace" element={<AddMarketplace />} />
+          <Route path="/viewMarketplace/:id" element={<ViewSingleMarketplace />} />
+          <Route path="/manageMarketplace" element={<ManageMarketplace />} />
+          <Route path="/editMarketplace/:id" element={<EditMarketplace />} /> */}
         </Routes>
 
         {/* Render the Footer outside of the Routes */}

@@ -57,12 +57,8 @@ const RecentCard = () => {
                 <div className="category flex">
                   <span
                     style={{
-                      background:
-                        category === "Temporary Stay"
-                          ? "#25b5791a"
-                          : "#ff98001a",
-                      color:
-                        category === "Temporary Stay" ? "#25b579" : "#ff9800",
+                      background: "#ff98001a",
+                      color: "#ff9800",
                     }}
                   >
                     {category}

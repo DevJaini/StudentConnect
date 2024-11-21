@@ -10,6 +10,11 @@ export const viewListing = async (id) => {
   return await apiRequest("GET", `/listing/view/${id}`);
 };
 
+// View a single listing by userId
+export const viewUserListings = async (userId) => {
+  return await apiRequest("GET", `/listing/viewUser/${userId}`);
+};
+
 // View all listings
 export const viewAllListings = async () => {
   return await apiRequest("GET", "/listing/viewAll");

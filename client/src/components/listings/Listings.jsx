@@ -32,7 +32,7 @@ const Listings = () => {
 
   const handleManageProperties = () => {
     if (user) {
-      navigate("/manageListing");
+      navigate("/manageListings");
     } else {
       alert("Please log in to manage your properties.");
       navigate("/signin");

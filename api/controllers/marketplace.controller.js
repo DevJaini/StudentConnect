@@ -1,22 +1,23 @@
 import { supabase } from "../database/supabase.config.js";
 
-export const addListing = async (req, res) => {
+// Add a new marketplace item
+export const addMarketplaceItem = async (req, res) => {
   try {
-    console.log("entering:", req.body);
-    console.log("image", req.files);
+    console.log("Entering:", req.body);
+    console.log("Images:", req.files);
 
     // Initialize an array to hold image URLs
     let imageUrls = [];
 
     for (const file of req.files) {
-      const { originalname, buffer } = file; // Multer stores the file as a buffer
+      const { originalname, buffer } = file;
 
       // Generate a unique filename for each image
       const fileName = `${Date.now()}-${originalname}`;
 
       // Upload the image to Supabase storage
       const { data, error } = await supabase.storage
-        .from("listing-images") // Ensure this is the correct bucket
+        .from(" ") // Ensure this is the correct bucket
         .upload(`uploads/${fileName}`, buffer, {
           contentType: file.mimetype,
         });
@@ -24,119 +25,94 @@ export const addListing = async (req, res) => {
       if (error) {
         return res.status(500).json({ error: error.message });
       }
+
       // Store the uploaded image URL
       const imageUrl = `${process.env.SUPABASE_URL}/storage/v1/object/public/${data.fullPath}`;
 
       imageUrls.push(imageUrl);
     }
 
-    // Now insert the listing data into the database, including the image URLs
-    const listingData = { ...req.body, images: imageUrls };
+    // Insert marketplace data into the database
+    const marketplaceData = { ...req.body, images: imageUrls };
 
     const { data, error } = await supabase
-      .from("listings")
-      .insert([listingData]);
+      .from("marketplace")
+      .insert([marketplaceData]);
 
     if (error) {
-      console.log("Database insert error:", error);
       return res.status(400).json({ error: error.message });
     }
 
-    // Respond with success message
-    res
-      .status(200)
-      .json({ success: true, message: "Listing added successfully!", data });
+    res.status(200).json({
+      success: true,
+      message: "Marketplace item added successfully!",
+      data,
+    });
   } catch (err) {
     console.log("Server error:", err);
     res.status(500).json({ error: "Server error", err });
   }
 };
-export const viewListing = async (req, res) => {
+
+// View a single marketplace item by ID
+export const viewMarketplaceItem = async (req, res) => {
   const { id } = req.params;
 
   try {
     if (!id) {
-      return res.status(400).json({ error: "Listing Id is required!" });
+      return res
+        .status(400)
+        .json({ error: "Marketplace item ID is required!" });
     }
 
-    // Fetching the listing from the database
     const { data, error } = await supabase
-      .from("listings")
+      .from("marketplace")
       .select("*")
       .eq("id", id)
-      .single(); // Use single() since you're fetching one record
+      .single();
 
-    // Check for error in fetching data
     if (error) {
       return res.status(400).json({ error: error.message });
     }
 
-    // If images exist, create image URLs
-    // if (data && data.images) {
-    //   data.imageUrl = supabase.storage
-    //     .from("listing-images")
-    //     .getPublicUrl(data.images).publicUrl; // Assuming images is a single string or an array
-    // }
-
-    // Return the data after processing
     return res.status(200).json(data);
   } catch (err) {
-    console.log(err);
     res.status(500).json({ error: "Server error", err });
   }
 };
 
-export const viewAllListings = async (req, res) => {
+// View all marketplace items
+export const viewAllMarketplaceItems = async (req, res) => {
   try {
-    const { data, error } = await supabase.from("listings").select("*");
+    const { data, error } = await supabase.from("marketplace").select("*");
 
     if (error) {
       return res.status(400).json({ error: error.message });
     }
-    return res.status(200).json(data);
 
-    // return data.map((listing) => {
-    //   if (listing.images) {
-    //     listing.imageUrl = supabase.storage
-    //       .from("listing-images")
-    //       .getPublicUrl(listing.images).publicUrl;
-    //   }
-    // return data;
-    // });
+    return res.status(200).json(data);
   } catch (err) {
     res.status(500).json({ error: "Server error", err });
   }
 };
 
-export const viewUserListings = async (req, res) => {
+// View all marketplace items for a specific user
+export const viewUserMarketplaceItems = async (req, res) => {
   const { userId } = req.params;
 
   try {
-    console.log("---enter------", userId);
     if (!userId) {
-      return res.status(400).json({ error: "User Id is required!" });
+      return res.status(400).json({ error: "User ID is required!" });
     }
-    console.log("SWDErf", userId);
+
     const { data, error } = await supabase
-      .from("listings")
+      .from("marketplace")
       .select("*")
       .eq("user_id", userId);
 
     if (error) {
-      console.log("ss", error);
-
       return res.status(400).json({ error: error.message });
     }
-    console.log("SWDErsdfghjf", data);
-
-    // return data.map((listing) => {
-    //   if (listing.images) {
-    //     listing.imageUrl = supabase.storage
-    //       .from("listing-images")
-    //       .getPublicUrl(listing.images).publicUrl;
-    //   }
-    //   return listing;
-    // });
 
     return res.status(200).json(data);
   } catch (err) {
@@ -144,47 +120,53 @@ export const viewUserListings = async (req, res) => {
   }
 };
 
-export const updateListing = async (req, res) => {
+// Update an existing marketplace item
+export const updateMarketplaceItem = async (req, res) => {
   const { id } = req.params;
   const updates = req.body;
 
   try {
     if (!id) {
-      return res.status(400).json({ error: "Listing Id is required!" });
+      return res
+        .status(400)
+        .json({ error: "Marketplace item ID is required!" });
     }
 
-    console.log("4356", updates);
     const { data, error } = await supabase
-      .from("listings")
+      .from("marketplace")
       .update(updates)
       .eq("id", id);
 
     if (error) {
-      console.log("3", error);
       return res.status(400).json({ error: error.message });
     }
+
     res.status(200).json({ success: true });
   } catch (err) {
     res.status(500).json({ error: "Server error", err });
   }
 };
 
-export const archiveListing = async (req, res) => {
+// Archive (delete) a marketplace item
+export const archiveMarketplaceItem = async (req, res) => {
   const { id } = req.params;
 
   try {
     if (!id) {
-      return res.status(400).json({ error: "Listing Id is required!" });
+      return res
+        .status(400)
+        .json({ error: "Marketplace item ID is required!" });
     }
 
     const { data, error } = await supabase
-      .from("listings")
+      .from("marketplace")
       .delete()
       .eq("id", id);
 
     if (error) {
       return res.status(400).json({ error: error.message });
     }
+
     res.status(200).json(data);
   } catch (err) {
     res.status(500).json({ error: "Server error", err });

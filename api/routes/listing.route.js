@@ -54,8 +54,38 @@ router.post("/add", authenticate, async (req, res, next) => {
 
 router.get("/view/:id", authenticate, viewListing);
 router.get("/viewAll", viewAllListings);
-router.get("/view/:userId", authenticate, viewUserListings);
-router.put("/update/:id", authenticate, updateListing);
+router.get("/viewUser/:userId", authenticate, viewUserListings);
+// router.put("/update/:id", authenticate, updateListing);
+
+router.put(
+  "/update/:id",
+  authenticate,
+  async (req, res, next) => {
+    uploadService("images")(req, res, async (err) => {
+      if (err) {
+        return res.status(400).json({ error: err.message });
+      }
+
+      try {
+        let fileUrls = [];
+        // Upload files if provided
+        if (req.files && req.files.length > 0) {
+          fileUrls = await uploadToSupabase(req.files);
+        }
+
+        // Attach file URLs to the request body
+        req.body.images = fileUrls;
+
+        // Delegate to the updateListing controller
+        next();
+      } catch (uploadError) {
+        return res.status(500).json({ error: uploadError.message });
+      }
+    });
+  },
+  updateListing
+);
+
 router.delete("/archive/:id", authenticate, archiveListing);
 
 export default router;

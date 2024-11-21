@@ -6,13 +6,12 @@
   margin: 2% 5%;
 }
 
-/* Header Buttons Container */
+/* Button Styling */
 .header-buttons {
   display: flex;
   gap: 15px; /* Space between buttons */
 }
 
-/* Button Styling */
 .header-btn {
   padding: 10px 20px;
   background-color: #27ae60;
@@ -23,17 +22,17 @@
   font-size: 14px;
 }
 
-/* Property List Grid */
-.property-list {
+/* Listing Grid */
+.listing-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 columns by default */
+  grid-template-columns: repeat(3, 1fr); /* 3 columns */
   gap: 20px;
   padding: 20px;
   margin: 2%;
 }
 
-/* Property Card Styling */
-.property-card {
+/* Listing Card Styling */
+.listing-card {
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   background-color: #fff;
@@ -43,61 +42,60 @@
   text-align: center;
 }
 
-.property-card:hover {
+.listing-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-.property-card img {
+.listing-card img {
   width: 100%;
   height: 150px;
   object-fit: cover;
   border-bottom: 1px solid #ddd;
 }
 
-.property-card h3 {
+.listing-card h3 {
   font-size: 1.1em;
   margin: 10px 0 5px;
   color: #333;
 }
 
-.property-card p {
+.listing-card p {
   font-size: 0.95em;
   color: #555;
   margin: 5px 0;
 }
 
-.property-card p:last-child {
+.listing-card p:last-child {
   font-weight: bold;
   color: #25b579;
 }
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
-  .property-list {
+  .listing-grid {
     grid-template-columns: repeat(2, 1fr); /* 2 columns on smaller screens */
   }
 }
 
 @media (max-width: 480px) {
-  .property-list {
+  .listing-grid {
     grid-template-columns: 1fr; /* 1 column on extra small screens */
   }
 }
 
-.property-card {
+.listing-card {
   position: relative;
-  /* Other styles for property card */
 }
 
-.location-type {
+.listing-location-type {
   display: flex;
   flex-direction: column;
   margin-top: 10px;
   align-items: center;
 }
 
-.location-type p {
+.listing-location-type p {
   font-size: 16px;
   display: flex;
   align-items: center;
