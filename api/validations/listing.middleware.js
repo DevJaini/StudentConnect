@@ -17,7 +17,7 @@ const listingSchema = Joi.object({
     "string.empty": "State is required",
   }),
   address: Joi.string().required().messages({
-    "string.empty": "address is required",
+    "string.empty": "Address is required",
   }),
   title: Joi.string().required().messages({
     "string.empty": "Title is required",
@@ -35,18 +35,12 @@ const listingSchema = Joi.object({
     "string.empty": "Type of house is required",
   }),
   images: Joi.optional(),
-
-  // array().items(Joi.string().uri()).min(1).messages({
-  //   "array.base": "Images must be an array of valid URLs",
-  //   "array.min": "At least 3 images are required",
-  //   "string.uri": "Each image must be a valid URL",
-  // }),
   user_id: Joi.number().required().messages({
     "string.empty": "User ID is required",
   }),
   description: Joi.optional(),
   category: Joi.string().required().messages({
-    "string.empty": "category is required",
+    "string.empty": "Category is required",
   }),
   facilities: Joi.optional(),
   offers: Joi.optional(),

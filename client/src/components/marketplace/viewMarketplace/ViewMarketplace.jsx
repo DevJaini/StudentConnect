@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Slider from "react-slick"; // React Slick for slider
-import { viewItem } from "../../../api/marketplace"; // Replace API function
+import { viewMarketplaceItem } from "../../../api/marketplace"; // Replace API function
 import { FaMapMarkerAlt, FaUser } from "react-icons/fa"; // Change icons if needed
 import "./viewMarketplace.css";
 
@@ -22,7 +22,7 @@ const PrevArrow = ({ className, style, onClick }) => (
   />
 );
 
-const ViewSingleItem = () => {
+const ViewMarketplace = () => {
   const { id } = useParams();
   const [item, setItem] = useState(null);
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ const ViewSingleItem = () => {
   useEffect(() => {
     const fetchItem = async () => {
       try {
-        const data = await viewItem(id);
+        const data = await viewMarketplaceItem(id);
         setItem(data);
       } catch (error) {
         console.error("Error fetching item:", error);
@@ -118,7 +118,7 @@ const ViewSingleItem = () => {
         <h3>Seller Information</h3>
         <div className="seller-info">
           <FaUser className="seller-icon" />
-          <span>{item.sellerName}</span>
+          {/* <span>{item.sellerName}</span> */}
         </div>
         <button
           onClick={() => alert("Contacting seller...")}
@@ -131,4 +131,4 @@ const ViewSingleItem = () => {
   );
 };
 
-export default ViewSingleItem;
+export default ViewMarketplace;

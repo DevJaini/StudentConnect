@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useUser } from "../../../context/userContext"; // Custom hook for user context
 import {
-  viewMarketplaceListing,
-  updateMarketplaceListing,
+  viewMarketplaceItem,
+  updateMarketplaceItem,
 } from "../../../api/marketplace"; // API methods for fetching and updating listings
 import { useNavigate, useParams } from "react-router-dom";
 import "./editMarketplace.css";
 
-const EditMarketplaceListing = () => {
+const EditMarketplace = () => {
   const [formData, setFormData] = useState({
     name: "",
     category: "",
@@ -29,7 +29,7 @@ const EditMarketplaceListing = () => {
   useEffect(() => {
     const fetchListing = async () => {
       try {
-        const listing = await viewMarketplaceListing(id); // API call to get listing details
+        const listing = await viewMarketplaceItem(id); // API call to get listing details
         setFormData({
           ...listing,
           images: listing.images || [], // Ensure existing images are set
@@ -89,7 +89,7 @@ const EditMarketplaceListing = () => {
     }
 
     try {
-      const response = await updateMarketplaceListing(id, data); // API call to update the listing
+      const response = await updateMarketplaceItem(id, data); // API call to update the listing
       if (response.success) {
         alert("Product updated successfully!");
         navigate("/marketplace"); // Redirect to marketplace after successful update
@@ -225,4 +225,4 @@ const EditMarketplaceListing = () => {
   );
 };
 
-export default EditMarketplaceListing;
+export default EditMarketplace;

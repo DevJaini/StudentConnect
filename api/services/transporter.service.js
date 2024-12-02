@@ -23,7 +23,6 @@ export const sendEmail = async (to, subject, text) => {
     };
 
     const info = await transporter.sendMail(mailOptions);
-    // console.log("Email sent: %s", info.messageId);
     return info;
   } catch (error) {
     throw new Error("Email sending failed");

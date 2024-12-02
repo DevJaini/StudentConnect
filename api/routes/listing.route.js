@@ -2,11 +2,9 @@ import express from "express";
 import { authenticate } from "../middleware/jwt.middleware.js";
 import {
   addListing,
-  viewListing,
-  viewAllListings,
+  viewListings,
+  dashboardViewListings,
   updateListing,
-  archiveListing,
-  viewUserListings,
 } from "../controllers/listing.controller.js";
 import { validateListing } from "../validations/listing.middleware.js";
 import { uploadService, uploadToSupabase } from "../services/multer.service.js";
@@ -18,19 +16,9 @@ const router = express.Router();
 // POST /create-listing route with authentication and file upload
 router.post("/add", authenticate, async (req, res, next) => {
   // Use upload service to handle image file upload
-  uploadService("images")(req, res, async (err) => {
-    if (err) {
-      return res.status(400).json({ error: err.message });
-    }
-
+  uploadService("images")(req, res, async () => {
     try {
-      // Check if files are present in the request
-      if (!req.files || req.files.length === 0) {
-        return res
-          .status(400)
-          .json({ error: "At least one image is required." });
-      }
-
+      console.log(req);
       // Upload the images to Supabase and get the public URLs
       const fileUrls = await uploadToSupabase(req.files);
       console.log(fileUrls);
@@ -52,16 +40,15 @@ router.post("/add", authenticate, async (req, res, next) => {
   });
 });
 
-router.get("/view/:id", authenticate, viewListing);
-router.get("/viewAll", viewAllListings);
-router.get("/viewUser/:userId", authenticate, viewUserListings);
-// router.put("/update/:id", authenticate, updateListing);
+router.post("/view", authenticate, viewListings);
+
+router.get("/dashboardView", dashboardViewListings);
 
 router.put(
-  "/update/:id",
+  "/update",
   authenticate,
   async (req, res, next) => {
-    uploadService("images")(req, res, async (err) => {
+    uploadService("updatedImages")(req, res, async (err) => {
       if (err) {
         return res.status(400).json({ error: err.message });
       }
@@ -73,8 +60,14 @@ router.put(
           fileUrls = await uploadToSupabase(req.files);
         }
 
-        // Attach file URLs to the request body
-        req.body.images = fileUrls;
+        // Check if `images` already exists and is an array
+        if (Array.isArray(req.body.images)) {
+          // Append new `fileUrls` to the existing array
+          req.body.images = [...req.body.images, ...fileUrls];
+        } else {
+          // Initialize `images` with `fileUrls` if it doesn't exist or isn't an array
+          req.body.images = fileUrls;
+        }
 
         // Delegate to the updateListing controller
         next();
@@ -85,7 +78,5 @@ router.put(
   },
   updateListing
 );
-
-router.delete("/archive/:id", authenticate, archiveListing);
 
 export default router;

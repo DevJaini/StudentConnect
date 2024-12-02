@@ -90,7 +90,7 @@ const ViewSingleListing = () => {
         <div className="listing-location">
           <FaMapMarkerAlt className="location-icon" />
           <span>{listing.address},</span>
-          <span>{listing.city},</span>
+          <span>{listing.city}</span>
         </div>
         <p className="listing-location">{listing.location}</p>
 
@@ -163,3 +163,6 @@ const ViewSingleListing = () => {
 };
 
 export default ViewSingleListing;
+
+//streamchat
+//userId from token

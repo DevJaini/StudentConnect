@@ -12,6 +12,11 @@ import AddListings from "../listings/addListing/AddListings.jsx";
 import ViewSingleListing from "../listings/viewListing/ViewListing.jsx";
 import ManageListings from "../listings/manageListing/ManageListings.jsx";
 import EditListing from "../listings/editListing/EditListings.jsx";
+import Marketplace from "../marketplace/Marketplace.jsx";
+import AddMarketplace from "../marketplace/addMarketplace/AddMarketplace.jsx";
+import ViewMarketplace from "../marketplace/viewMarketplace/ViewMarketplace.jsx";
+import ManageMarketplace from "../marketplace/manageMarketplace/ManageMarketplace.jsx";
+import EditMarketplace from "../marketplace/editMarketplace/EditMarketplace.jsx";
 
 const Pages = () => {
   return (
@@ -34,11 +39,11 @@ const Pages = () => {
           <Route path="/manageListings" element={<ManageListings />} />
           <Route path="/editListing/:id" element={<EditListing />} />
 
-          {/* <Route path="/marketplace" element={<Marketplace />} />
+          <Route path="/marketplace" element={<Marketplace />} />
           <Route path="/addMarketplace" element={<AddMarketplace />} />
-          <Route path="/viewMarketplace/:id" element={<ViewSingleMarketplace />} />
+          <Route path="/viewMarketplace/:id" element={<ViewMarketplace />} />
           <Route path="/manageMarketplace" element={<ManageMarketplace />} />
-          <Route path="/editMarketplace/:id" element={<EditMarketplace />} /> */}
+          <Route path="/editMarketplace/:id" element={<EditMarketplace />} />
         </Routes>
 
         {/* Render the Footer outside of the Routes */}

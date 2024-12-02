@@ -24,13 +24,13 @@ export const signUp = async (req, res) => {
 
     const { error } = await supabase
       .from("users")
-      .insert([{ username, email, password: hashedPassword }]);
+      .insert({ username, email, password: hashedPassword });
 
     if (error) {
       return res.status(400).json({ error: error.message });
     }
 
-    res.status(200).json({ message: "Account created successfully!" });
+    res.status(200).json({ message: "Account created successfully!", data });
   } catch (err) {
     res.status(500).json({
       error: "An internal server error occurred. Please try again later.",
@@ -66,8 +66,8 @@ export const signIn = async (req, res) => {
       });
     }
 
-    user.token = generateToken(user);
     delete user.password;
+    user.token = generateToken(user);
 
     res.status(200).json({ message: "Logged in successfully!", user });
   } catch (err) {

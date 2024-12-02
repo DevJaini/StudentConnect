@@ -23,7 +23,7 @@ const Marketplace = () => {
 
   const handleAddItem = () => {
     if (user) {
-      navigate("/addMarketplaceItem");
+      navigate("/addMarketplace");
     } else {
       alert("Please log in to add an item.");
       navigate("/signin");
@@ -32,7 +32,7 @@ const Marketplace = () => {
 
   const handleManageItems = () => {
     if (user) {
-      navigate("/manageMarketplaceItems");
+      navigate("/manageMarketplace");
     } else {
       alert("Please log in to manage your items.");
       navigate("/signin");

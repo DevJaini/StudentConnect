@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { viewMarketplaceListings, archiveListing } from "../../../api/listings"; // API calls to get marketplace listings and archive them
+import {
+  viewMarketplaceItem,
+  archiveMarketplaceItem,
+} from "../../../api/marketplace"; // API calls to get marketplace listings and archive them
 import { useUser } from "../../../context/userContext"; // Accessing user context
 import { useNavigate } from "react-router-dom";
 import { FaMapMarkerAlt, FaHome } from "react-icons/fa"; // Icons for location and type
-import "./marketplace.css";
+import "./manageMarketplace.css";
 
 const ManageMarketplace = () => {
   const [listings, setListings] = useState([]);
@@ -14,7 +17,7 @@ const ManageMarketplace = () => {
   useEffect(() => {
     const fetchListings = async () => {
       try {
-        const fetchedListings = await viewMarketplaceListings(user.id); // Fetching listings for the user
+        const fetchedListings = await viewMarketplaceItem(user.id); // Fetching listings for the user
         console.log("Fetched Marketplace Listings", fetchedListings);
         setListings(fetchedListings);
       } catch (error) {
@@ -40,7 +43,7 @@ const ManageMarketplace = () => {
     );
     if (confirmDelete) {
       try {
-        await archiveListing(listingId); // Archive the listing (delete action)
+        await archiveMarketplaceItem(listingId); // Archive the listing (delete action)
         setListings(
           (prevListings) =>
             prevListings.filter((listing) => listing.id !== listingId) // Remove deleted listing from state
