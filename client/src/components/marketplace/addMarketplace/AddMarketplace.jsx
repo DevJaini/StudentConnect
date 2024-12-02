@@ -7,6 +7,8 @@ import "./addMarketplace.css"; // Assuming you have a CSS file for styling
 const AddMarketplace = () => {
   const [formData, setFormData] = useState({
     city: "",
+    state: "",
+    address: "",
     title: "",
     description: "",
     price: "",
@@ -78,6 +80,9 @@ const AddMarketplace = () => {
 
   return (
     <div className="add-marketplace-container">
+      <button className="back-btn" onClick={() => navigate(-1)}>
+        &larr; Back to Marketplace
+      </button>
       <h2 className="center color">Add New Item to Marketplace</h2>
       {loading ? (
         <div className="spinner-container">
@@ -86,18 +91,7 @@ const AddMarketplace = () => {
       ) : (
         <form onSubmit={handleSubmit} className="add-marketplace-form">
           <label>
-            City:*
-            <input
-              type="text"
-              name="city"
-              value={formData.city}
-              onChange={handleChange}
-              required
-            />
-          </label>
-
-          <label>
-            Title:*
+            Product Name:*
             <input
               type="text"
               name="title"
@@ -113,6 +107,7 @@ const AddMarketplace = () => {
               name="description"
               value={formData.description}
               onChange={handleChange}
+              placeholder="Mention complete details"
               required
             />
           </label>
@@ -123,6 +118,40 @@ const AddMarketplace = () => {
               type="number"
               name="price"
               value={formData.price}
+              onChange={handleChange}
+              placeholder="(Only in Numbers)"
+              required
+            />
+          </label>
+
+          <label>
+            City:*
+            <input
+              type="text"
+              name="city"
+              value={formData.city}
+              onChange={handleChange}
+              required
+            />
+          </label>
+
+          <label>
+            State:*
+            <input
+              type="text"
+              name="state"
+              value={formData.state}
+              onChange={handleChange}
+              required
+            />
+          </label>
+
+          <label>
+            Address:*
+            <input
+              type="text"
+              name="address"
+              value={formData.address}
               onChange={handleChange}
               required
             />
@@ -151,11 +180,14 @@ const AddMarketplace = () => {
               name="condition"
               value={formData.condition}
               onChange={handleChange}
+              placeholder="(Mention in description details)"
               required
             >
               <option value="">Select Condition</option>
               <option value="New">New</option>
               <option value="Used">Used</option>
+              <option value="Likely New">Likely New</option>
+              <option value="Refurbished">Refurbished</option>
             </select>
           </label>
 

@@ -67,6 +67,12 @@
   margin: 5px 0;
 }
 
+.message {
+  color: #27ae60;
+  font-size: 20px;
+  font-weight: bolder;
+}
+
 .property-card p:last-child {
   font-weight: bold;
   color: #25b579;

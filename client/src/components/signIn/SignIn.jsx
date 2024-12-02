@@ -20,7 +20,6 @@ const SignIn = () => {
     setLoading(true);
     setErrorMessage("");
 
-    console.log(email, password);
     const { user, error } = await signIn({
       email,
       password,
@@ -30,12 +29,10 @@ const SignIn = () => {
 
     if (error) {
       setErrorMessage(error.message);
-      console.error("Error signing in:", error);
 
       return;
     }
 
-    console.log("User:", user);
     // Store token in localStorage
     localStorage.setItem("authToken", user.token);
     setUser(user); // Store username in context
@@ -53,7 +50,6 @@ const SignIn = () => {
       return;
     }
 
-    console.log("User:", user);
     navigate("/");
   };
 

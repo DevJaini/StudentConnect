@@ -8,13 +8,13 @@ export const signUp = async (req, res) => {
   const { username, email, password } = req.body;
 
   try {
-    const { data: user } = await supabase
+    const { data } = await supabase
       .from("users")
       .select("*")
       .eq("email", email)
       .single();
 
-    if (user) {
+    if (data) {
       return res
         .status(400)
         .json({ error: "A user with this email already exists." });
@@ -105,7 +105,34 @@ export const getProfile = async (req, res) => {
 
     res.status(200).json(data);
   } catch (err) {
-    console.error("Get Profile Error:", err);
+    res.status(500).json({
+      error: "An internal server error occurred. Please try again later.",
+      details: err.message,
+    });
+  }
+};
+
+export const updateProfile = async (req, res) => {
+  const id = req.user.userId;
+
+  try {
+    if (!id) {
+      return res
+        .status(400)
+        .json({ error: "Id is required to fetch the profile." });
+    }
+
+    const { error } = await supabase
+      .from("users")
+      .update(req.body)
+      .eq("id", id);
+
+    if (error) {
+      return res.status(400).json({ error: error.message });
+    }
+
+    res.status(200).json({ success: true });
+  } catch (err) {
     res.status(500).json({
       error: "An internal server error occurred. Please try again later.",
       details: err.message,
@@ -138,7 +165,7 @@ export const forgotPassword = async (req, res) => {
 };
 
 // Reset Password Controller
-export const resetPassword = async (req, res) => {
+export const updatePassword = async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -161,6 +188,52 @@ export const resetPassword = async (req, res) => {
       .from("users")
       .update({ password: hashedPassword })
       .eq("email", email);
+
+    if (updateError) {
+      return res
+        .status(400)
+        .json({ error: "Unable to reset password. Please try again." });
+    }
+
+    res.status(200).json({ message: "Password reset successful!" });
+  } catch (err) {
+    res.status(500).json({ error: "Server error", details: err.message });
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  const { oldPassword, newPassword } = req.body;
+  const id = req.user.userId;
+
+  try {
+    const { data, error } = await supabase
+      .from("users")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (error || !data) {
+      return res
+        .status(404)
+        .json({ error: "User profile not found. Please check your details." });
+    }
+
+    const validPassword = await bcrypt.compare(oldPassword, data.password);
+
+    if (!validPassword) {
+      return res.status(400).json({
+        error:
+          "Incorrect old password. Please check your credentials and try again.",
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update the password in the database
+    const { error: updateError } = await supabase
+      .from("users")
+      .update({ password: hashedPassword })
+      .eq("id", id);
 
     if (updateError) {
       return res

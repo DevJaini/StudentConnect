@@ -27,6 +27,9 @@ const Header = () => {
             {user ? ( // Check if user is logged in
               <>
                 <h3 className="user-greeting">Hello, {user.username}</h3>
+                <Link to="/editProfile">
+                  <button className="btn btn-signout">Edit Profile</button>
+                </Link>
                 <button className="btn btn-signout" onClick={handleLogout}>
                   Sign Out
                 </button>

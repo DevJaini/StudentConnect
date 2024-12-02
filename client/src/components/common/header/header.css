@@ -108,7 +108,3 @@ header .toggle {
   text-decoration: none;
   color: inherit;
 }
-
-.header .btn-link:hover {
-  text-decoration: underline;
-}

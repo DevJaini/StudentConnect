@@ -83,6 +83,15 @@
   animation: spin 1s linear infinite;
 }
 
+.existing-images img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover; /* Ensure images are cropped appropriately */
+  margin: 5px; /* Add spacing between images */
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -111,4 +120,31 @@
   .submit-btn {
     font-size: 0.9rem;
   }
+}
+
+.thumbnail {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  margin: 5px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.image-preview {
+  position: relative;
+  display: inline-block;
+}
+
+.remove-image-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  color: white;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

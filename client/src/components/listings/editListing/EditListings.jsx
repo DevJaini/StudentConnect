@@ -1,7 +1,7 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useState, useEffect } from "react";
-import { useUser } from "../../../context/userContext"; // Custom hook for user context
 import { viewListing, updateListing } from "../../../api/listings"; // API methods
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./editListings.css";
 
 const EditListing = () => {
@@ -20,26 +20,26 @@ const EditListing = () => {
     facilities: "",
     offers: "",
     fees_policies: "",
-    images: [], // Field for existing and new images combined
-    user_id: "",
+    images: [], // Old images (URLs)
+    updatedImages: [], // New images (files)
   });
   const [loading, setLoading] = useState(true);
-  const { user } = useUser(); // Access user data from the context
-  const { id } = useParams(); // Access the listing ID from the URL params
+  const location = useLocation(); // Access the current location (with state)
   const navigate = useNavigate();
+
+  const { id } = location.state || {}; // Destructure id from state
 
   // Fetch the existing listing data
   useEffect(() => {
     const fetchListing = async () => {
       try {
-        const listing = await viewListing(id); // Fetch listing data by ID
+        const listing = await viewListing({ id }); // Fetch listing data by ID
         setFormData({
-          ...listing,
-          images: listing.images || [], // Set existing images if available
+          ...listing[0],
+          images: listing[0].images || [], // Set existing images if available
         });
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching listing:", error);
         alert("Failed to load the listing. Please try again.");
         setLoading(false);
       }
@@ -59,10 +59,20 @@ const EditListing = () => {
 
   // Handle new image file selection
   const handleImageChange = (e) => {
-    const files = Array.from(e.target.files);
+    const files = Array.from(e.target.files); // Convert FileList to Array
     setFormData({
       ...formData,
-      images: [...formData.images, ...files], // Append new images to existing ones
+      updatedImages: [...files], // Append new files to updatedImages
+    });
+  };
+
+  // Handle removing an old image
+  const removeOldImage = (index) => {
+    const updatedOldImages = [...formData.images];
+    updatedOldImages.splice(index, 1); // Remove the image at the specified index
+    setFormData({
+      ...formData,
+      images: [...updatedOldImages],
     });
   };
 
@@ -74,35 +84,28 @@ const EditListing = () => {
 
     const data = new FormData();
     Object.keys(formData).forEach((key) => {
-      if (key !== "images") {
+      if (key !== "images" && key !== "updatedImages") {
         data.append(key, formData[key]); // Append all other form data
       }
     });
 
-    // Append all images (existing + new) to the FormData object
-    formData.images.forEach((image) => {
-      data.append("images", image); // Append each image (URL or file)
-    });
+    data.append("images", JSON.stringify(formData.images)); // Convert array to JSON string for structured transfer
 
-    console.log("w23er4tyu", data);
-
-    // Ensure user_id is passed as a single value
-    if (Array.isArray(data.user_id)) {
-      data.append("user_id", user.id[0]); // Get the first ID if it's an array
-    } else {
-      data.append("user_id", user.id); // Otherwise, use the ID directly
+    if (formData.updatedImages && formData.updatedImages.length > 0) {
+      formData.updatedImages.forEach((file) => {
+        data.append("updatedImages", file); // Use 'updatedImages[]' for the new images array
+      });
     }
 
     try {
-      const response = await updateListing(id, data); // Call the API to update the listing
+      const response = await updateListing(data); // Call the API to update the listing
       if (response.success) {
         alert("Property updated successfully!");
-        navigate("/listings"); // Redirect to listings page after successful update
+        navigate("/manageListings"); // Redirect to listings page after successful update
       } else {
         alert("Failed to update property. Please try again.");
       }
     } catch (error) {
-      console.error("Error updating property:", error);
       alert("Error updating property. Please try again.");
     } finally {
       setLoading(false); // Set loading to false after submission
@@ -111,6 +114,9 @@ const EditListing = () => {
 
   return (
     <div className="add-property-container">
+      <button className="back-btn" onClick={() => navigate(-1)}>
+        &larr; Back My Listings
+      </button>
       <h2 className="center color">Edit Property</h2>
       {loading ? (
         <div className="spinner-container">
@@ -262,7 +268,7 @@ const EditListing = () => {
             Images:
             <input
               type="file"
-              name="images"
+              name="updatedImages"
               onChange={handleImageChange}
               multiple
               accept="image/*"
@@ -272,17 +278,20 @@ const EditListing = () => {
                 <h3>Existing Images:</h3>
                 <div className="existing-images">
                   {formData.images.map((image, index) => (
-                    // eslint-disable-next-line jsx-a11y/img-redundant-alt
-                    <img
-                      key={index}
-                      src={
-                        typeof image === "string"
-                          ? image
-                          : URL.createObjectURL(image)
-                      }
-                      alt={`Image ${index + 1}`}
-                      width="100"
-                    />
+                    <div key={index} className="image-preview">
+                      <img
+                        src={image}
+                        alt={`Image ${index + 1}`}
+                        className="thumbnail"
+                      />
+                      <button
+                        type="button"
+                        className="remove-image-btn"
+                        onClick={() => removeOldImage(index)}
+                      >
+                        ✕
+                      </button>
+                    </div>
                   ))}
                 </div>
               </div>

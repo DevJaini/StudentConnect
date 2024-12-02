@@ -51,7 +51,7 @@ const forgotPasswordSchema = Joi.object({
     }),
 });
 
-const resetPasswordSchema = Joi.object({
+const updatePasswordSchema = Joi.object({
   email: Joi.string()
     .email()
     .required()
@@ -75,4 +75,4 @@ const resetPasswordSchema = Joi.object({
 export const validateSignUp = validateRequest(signUpSchema);
 export const validateSignIn = validateRequest(signInSchema);
 export const validateForgotPassword = validateRequest(forgotPasswordSchema);
-export const validateResetPassword = validateRequest(resetPasswordSchema);
+export const validateUpdatePassword = validateRequest(updatePasswordSchema);

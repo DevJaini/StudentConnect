@@ -43,7 +43,6 @@ const uploadToSupabase = async (files) => {
       });
 
     if (error) {
-      console.error("Image upload error:", error);
       throw new Error(error.message); // Handle upload error
     }
 

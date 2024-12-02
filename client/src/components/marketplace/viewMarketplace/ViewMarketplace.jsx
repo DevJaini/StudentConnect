@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Slider from "react-slick"; // React Slick for slider
 import { viewMarketplaceItem } from "../../../api/marketplace"; // Replace API function
 import { FaMapMarkerAlt, FaUser } from "react-icons/fa"; // Change icons if needed
+import { useUser } from "../../../context/userContext.js"; // Import useUser hook
 import "./viewMarketplace.css";
 
 // Custom arrow components
@@ -23,15 +24,17 @@ const PrevArrow = ({ className, style, onClick }) => (
 );
 
 const ViewMarketplace = () => {
-  const { id } = useParams();
   const [item, setItem] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
+  const { id } = location.state || {}; // Destructure id from state
+  const { user } = useUser(); // Access user info and logout function
 
   useEffect(() => {
     const fetchItem = async () => {
       try {
-        const data = await viewMarketplaceItem(id);
-        setItem(data);
+        const data = await viewMarketplaceItem({ id });
+        setItem(data[0]);
       } catch (error) {
         console.error("Error fetching item:", error);
         navigate("/marketplace"); // Navigate back to marketplace on error
@@ -90,14 +93,14 @@ const ViewMarketplace = () => {
         <h1 className="item-title">{item.title}</h1>
         <div className="item-location">
           <FaMapMarkerAlt className="location-icon" />
-          <span>{item.location}</span>
+          <span>{`${item.address}, ${item.city}, ${item.state}`}</span>
         </div>
         <p className="item-price">${item.price}</p>
       </div>
 
       {/* Description Section */}
       <div className="description-section">
-        <h2>About this Item</h2>
+        <h3>About this Item</h3>
         <p>{item.description}</p>
       </div>
 
@@ -118,7 +121,7 @@ const ViewMarketplace = () => {
         <h3>Seller Information</h3>
         <div className="seller-info">
           <FaUser className="seller-icon" />
-          {/* <span>{item.sellerName}</span> */}
+          <span>&nbsp;&nbsp;{user.username}</span>
         </div>
         <button
           onClick={() => alert("Contacting seller...")}

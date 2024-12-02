@@ -131,11 +131,8 @@
   background-color: rgba(38, 174, 96, 0.1); /* Light green background */
   border: 2px solid rgba(38, 174, 96, 1); /* Green border */
   border-radius: 10px; /* Rounded corners */
-  padding: 10px; /* Padding for spacing */
+  padding: 20px; /* Padding for spacing */
   margin: 20px 0; /* Margin for separation */
-  display: flex; /* Flexbox layout for inline arrangement */
-  align-items: center; /* Align content vertically */
-  gap: 10px; /* Space between heading and text */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
 }
 
@@ -153,9 +150,9 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
 }
 
-.description-section h2 {
+.offer-box-inline h3,
+.description-section h3 {
   margin-bottom: 15px; /* Space below the heading */
-  font-size: 1.5rem; /* Larger heading size */
   color: rgba(38, 174, 96, 1); /* Green color for heading */
   text-align: left; /* Align heading to the left */
   font-weight: bold; /* Bold heading */

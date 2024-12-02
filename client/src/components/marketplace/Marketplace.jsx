@@ -61,7 +61,11 @@ const Marketplace = () => {
           <div
             key={item.id}
             className="item-card"
-            onClick={() => navigate(`/viewMarketplaceItem/${item.id}`)}
+            onClick={() =>
+              navigate(`/viewMarketplace`, {
+                state: { id: item.id }, // Pass id and entire listing object if needed
+              })
+            }
           >
             <div className="image-gallery">
               {item.images && item.images.length > 0 ? (

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useState, useEffect } from "react";
 import { useUser } from "../../../context/userContext"; // Custom hook for user context
 import {
@@ -9,14 +10,17 @@ import "./editMarketplace.css";
 
 const EditMarketplace = () => {
   const [formData, setFormData] = useState({
-    name: "",
+    title: "",
     category: "",
     description: "",
     price: "",
-    stock: "",
     condition: "",
-    location: "",
+    address: "",
+    city: "",
+    state: "",
+    offers: "",
     images: [], // For storing both existing and new images
+    updatedImages: [],
     user_id: "", // User ID of the person editing the listing
   });
 
@@ -29,15 +33,14 @@ const EditMarketplace = () => {
   useEffect(() => {
     const fetchListing = async () => {
       try {
-        const listing = await viewMarketplaceItem(id); // API call to get listing details
+        const listing = await viewMarketplaceItem({ id }); // API call to get listing details
         setFormData({
-          ...listing,
-          images: listing.images || [], // Ensure existing images are set
-          user_id: listing.user_id || user.id, // Set user ID
+          ...listing[0],
+          images: listing[0].images || [], // Ensure existing images are set
+          user_id: listing[0].user_id || user.id, // Set user ID
         });
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching listing:", error);
         alert("Failed to load the listing. Please try again.");
         setLoading(false);
       }
@@ -55,12 +58,21 @@ const EditMarketplace = () => {
     });
   };
 
-  // Handle new image file selection
   const handleImageChange = (e) => {
-    const files = Array.from(e.target.files);
+    const files = Array.from(e.target.files); // Convert FileList to Array
     setFormData({
       ...formData,
-      images: [...formData.images, ...files], // Add new images to existing ones
+      updatedImages: [...files], // Append new files to updatedImages
+    });
+  };
+
+  // Handle removing an old image
+  const removeOldImage = (index) => {
+    const updatedOldImages = [...formData.images];
+    updatedOldImages.splice(index, 1); // Remove the image at the specified index
+    setFormData({
+      ...formData,
+      images: [...updatedOldImages],
     });
   };
 
@@ -70,29 +82,26 @@ const EditMarketplace = () => {
     setLoading(true); // Set loading state to true while submitting
 
     const data = new FormData();
+
     Object.keys(formData).forEach((key) => {
-      if (key !== "images") {
-        data.append(key, formData[key]); // Append all form fields except images
+      if (key !== "images" && key !== "updatedImages") {
+        data.append(key, formData[key]); // Append all other form data
       }
     });
 
-    // Append all images to the FormData object
-    formData.images.forEach((image) => {
-      data.append("images", image); // Append each image (either URL or file object)
-    });
+    data.append("images", JSON.stringify(formData.images)); // Convert array to JSON string for structured transfer
 
-    // Ensure user_id is appended correctly
-    if (Array.isArray(data.user_id)) {
-      data.append("user_id", user.id[0]); // Handle case where user_id is an array
-    } else {
-      data.append("user_id", user.id); // Use user ID directly
+    if (formData.updatedImages && formData.updatedImages.length > 0) {
+      formData.updatedImages.forEach((file) => {
+        data.append("updatedImages", file); // Use 'updatedImages[]' for the new images array
+      });
     }
 
     try {
-      const response = await updateMarketplaceItem(id, data); // API call to update the listing
+      const response = await updateMarketplaceItem(data); // API call to update the listing
       if (response.success) {
         alert("Product updated successfully!");
-        navigate("/marketplace"); // Redirect to marketplace after successful update
+        navigate("/manageMarketplace"); // Redirect to marketplace after successful update
       } else {
         alert("Failed to update the product. Please try again.");
       }
@@ -106,7 +115,11 @@ const EditMarketplace = () => {
 
   return (
     <div className="edit-marketplace-container">
+      <button className="back-btn" onClick={() => navigate(-1)}>
+        &larr; Back My Marketplace Items
+      </button>
       <h2 className="center color">Edit Product</h2>
+
       {loading ? (
         <div className="spinner-container">
           <div className="spinner"></div>
@@ -117,21 +130,28 @@ const EditMarketplace = () => {
             Product Name:*
             <input
               type="text"
-              name="name"
-              value={formData.name}
+              name="title"
+              value={formData.title}
               onChange={handleChange}
               required
             />
           </label>
           <label>
             Category:*
-            <input
+            <select
               type="text"
               name="category"
               value={formData.category}
               onChange={handleChange}
               required
-            />
+            >
+              <option value="">Select Category</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Furniture">Furniture</option>
+              <option value="Clothing">Clothing</option>
+              <option value="Accessories">Accessories</option>
+              <option value="Others">Others</option>
+            </select>
           </label>
           <label>
             Description:*
@@ -153,16 +173,6 @@ const EditMarketplace = () => {
             />
           </label>
           <label>
-            Stock Quantity:*
-            <input
-              type="number"
-              name="stock"
-              value={formData.stock}
-              onChange={handleChange}
-              required
-            />
-          </label>
-          <label>
             Condition:*
             <select
               name="condition"
@@ -174,23 +184,45 @@ const EditMarketplace = () => {
               <option value="New">New</option>
               <option value="Used">Used</option>
               <option value="Refurbished">Refurbished</option>
+              <option value="Likely New">Likely New</option>
             </select>
           </label>
           <label>
-            Location:*
+            Address:*
             <input
               type="text"
-              name="location"
-              value={formData.location}
+              name="address"
+              value={formData.address}
               onChange={handleChange}
               required
             />
           </label>
           <label>
+            City:*
+            <input
+              type="text"
+              name="city"
+              value={formData.city}
+              onChange={handleChange}
+              required
+            />
+          </label>
+          <label>
+            State:*
+            <input
+              type="text"
+              name="state"
+              value={formData.state}
+              onChange={handleChange}
+              required
+            />
+          </label>
+
+          <label>
             Images:
             <input
               type="file"
-              name="images"
+              name="updatedImages"
               onChange={handleImageChange}
               multiple
               accept="image/*"
@@ -200,21 +232,35 @@ const EditMarketplace = () => {
                 <h3>Existing Images:</h3>
                 <div className="existing-images">
                   {formData.images.map((image, index) => (
-                    // eslint-disable-next-line jsx-a11y/img-redundant-alt
-                    <img
-                      key={index}
-                      src={
-                        typeof image === "string"
-                          ? image
-                          : URL.createObjectURL(image)
-                      }
-                      alt={`Image ${index + 1}`}
-                      width="100"
-                    />
+                    <div key={index} className="image-preview">
+                      <img
+                        src={image}
+                        alt={`Image ${index + 1}`}
+                        className="thumbnail"
+                      />
+                      <button
+                        type="button"
+                        className="remove-image-btn"
+                        onClick={() => removeOldImage(index)}
+                      >
+                        ✕
+                      </button>
+                    </div>
                   ))}
                 </div>
               </div>
             )}
+          </label>
+
+          <label>
+            Offers:*
+            <input
+              type="text"
+              name="offers"
+              value={formData.offers}
+              onChange={handleChange}
+              required
+            />
           </label>
           <button type="submit" className="submit-btn">
             Update Product

@@ -26,7 +26,7 @@ const SignUp = () => {
     }
 
     setLoading(true); // Set loading state to true
-    setErrorMessage(""); // Reset error message
+    setErrorMessage("");
 
     const { error } = await signUp({
       username,
@@ -35,11 +35,10 @@ const SignUp = () => {
       confirmPassword,
     });
 
-    setLoading(false); // Reset loading state
+    setLoading(false);
 
     if (error) {
       setErrorMessage(error.message); // Display error message
-      console.error("Error signing up:", error);
       return;
     }
 
@@ -50,17 +49,15 @@ const SignUp = () => {
 
   // Function to handle Google sign-up
   const handleGoogleSignUp = async () => {
-    const { user, error } = await supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
     });
 
     if (error) {
-      console.error("Error signing up with Google:", error);
       setErrorMessage(error.message); // Display error message
       return;
     }
 
-    console.log("User:", user);
     navigate("/"); // Redirect to the home page upon successful Google sign-up
   };
 

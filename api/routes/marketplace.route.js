@@ -61,13 +61,19 @@ router.put(
 
       try {
         let fileUrls = [];
+        if (req.body.images) {
+          req.body.images = JSON.parse(req.body.images); // Converts JSON string back to an array
+        }
         // Upload files if provided
         if (req.files && req.files.length > 0) {
           fileUrls = await uploadToSupabase(req.files);
-        }
 
-        // Attach file URLs to the request body
-        req.body.images = fileUrls;
+          // Check if `images` already exists and is an array
+          if (Array.isArray(req.body.images)) {
+            // Append new `fileUrls` to the existing array
+            req.body.images = [...req.body.images, ...fileUrls];
+          }
+        }
 
         // Delegate to the updateMarketplaceItem controller
         next();

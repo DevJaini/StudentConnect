@@ -22,8 +22,8 @@
   font-size: 14px;
 }
 
-/* Listing Grid */
-.listing-grid {
+/* marketplace Grid */
+.marketplace-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* 3 columns */
   gap: 20px;
@@ -31,8 +31,8 @@
   margin: 2%;
 }
 
-/* Listing Card Styling */
-.listing-card {
+/* marketplace Card Styling */
+.marketplace-card {
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   background-color: #fff;
@@ -42,60 +42,60 @@
   text-align: center;
 }
 
-.listing-card:hover {
+.marketplace-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-.listing-card img {
+.marketplace-card img {
   width: 100%;
   height: 150px;
   object-fit: cover;
   border-bottom: 1px solid #ddd;
 }
 
-.listing-card h3 {
+.marketplace-card h3 {
   font-size: 1.1em;
   margin: 10px 0 5px;
   color: #333;
 }
 
-.listing-card p {
+.marketplace-card p {
   font-size: 0.95em;
   color: #555;
   margin: 5px 0;
 }
 
-.listing-card p:last-child {
+.marketplace-card p:last-child {
   font-weight: bold;
   color: #25b579;
 }
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
-  .listing-grid {
+  .marketplace-grid {
     grid-template-columns: repeat(2, 1fr); /* 2 columns on smaller screens */
   }
 }
 
 @media (max-width: 480px) {
-  .listing-grid {
+  .marketplace-grid {
     grid-template-columns: 1fr; /* 1 column on extra small screens */
   }
 }
 
-.listing-card {
+.marketplace-card {
   position: relative;
 }
 
-.listing-location-type {
+.marketplace-location-type {
   display: flex;
   flex-direction: column;
   margin-top: 10px;
   align-items: center;
 }
 
-.listing-location-type p {
+.marketplace-location-type p {
   font-size: 16px;
   display: flex;
   align-items: center;

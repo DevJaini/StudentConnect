@@ -7,12 +7,14 @@ import {
   getProfile,
   forgotPassword,
   resetPassword,
+  updateProfile,
+  updatePassword,
 } from "../controllers/user.controller.js";
 import {
   validateSignUp,
   validateSignIn,
   validateForgotPassword,
-  validateResetPassword,
+  validateUpdatePassword,
 } from "../validations/user.middleware.js";
 
 const router = express.Router();
@@ -20,8 +22,10 @@ const router = express.Router();
 router.post("/signUp", validateSignUp, signUp);
 router.post("/signIn", validateSignIn, signIn);
 router.get("/getProfile", authenticate, getProfile);
+router.put("/updateProfile", authenticate, updateProfile);
+router.put("/resetPassword", authenticate, resetPassword);
 router.post("/forgotPassword", validateForgotPassword, forgotPassword);
-router.put("/resetPassword", validateResetPassword, resetPassword);
+router.put("/updatePassword", validateUpdatePassword, updatePassword);
 router.post("/signin/google", googleSignIn);
 
 export default router;

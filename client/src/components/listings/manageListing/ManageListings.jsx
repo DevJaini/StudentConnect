@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { viewUserListings, archiveListing } from "../../../api/listings"; // Import the viewAllListings and archiveListing functions
+import { viewListing, updateListing } from "../../../api/listings"; // Import the viewAllListings and archiveListing functions
 import { useUser } from "../../../context/userContext"; // Import useUser to access user context
 import { useNavigate } from "react-router-dom";
 import { FaMapMarkerAlt, FaHome } from "react-icons/fa"; // Import FontAwesome icons
@@ -14,8 +14,7 @@ const ManageListings = () => {
   useEffect(() => {
     const fetchProperties = async () => {
       try {
-        const fetchedProperties = await viewUserListings(user.id);
-        console.log("Fetched Listings", fetchedProperties);
+        const fetchedProperties = await viewListing({ user_id: user.id });
         setProperties(fetchedProperties);
       } catch (error) {
         console.error("Error fetching properties:", error);
@@ -29,7 +28,9 @@ const ManageListings = () => {
 
   // Handle Edit action
   const handleEdit = (listingId) => {
-    navigate(`/editListing/${listingId}`); // Navigate to the edit page for this specific listing
+    navigate(`/editListing`, {
+      state: { id: listingId }, // Pass id and entire listing object if needed
+    });
   };
 
   // Handle Delete action
@@ -39,14 +40,16 @@ const ManageListings = () => {
     );
     if (confirmDelete) {
       try {
-        await archiveListing(listingId); // Call API to delete the listing
+        await updateListing({
+          id: listingId,
+          archived: true,
+        }); // Call API to delete the listing
         setProperties(
           (prevListings) =>
             prevListings.filter((listing) => listing.id !== listingId) // Remove the deleted listing from the state
         );
         alert("Listing deleted successfully.");
       } catch (error) {
-        console.error("Error deleting listing:", error);
         alert("Failed to delete listing.");
       }
     }
@@ -56,7 +59,11 @@ const ManageListings = () => {
     <div>
       <div className="header-container">
         <h1 className="color">Manage Your Properties</h1>
+        <button className="back-btn" onClick={() => navigate(-1)}>
+          &larr; Back to Listings
+        </button>
       </div>
+
       <div className="property-list">
         {listings.map((listing) => (
           <div key={listing.id} className="property-card">

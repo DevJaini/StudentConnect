@@ -12,16 +12,16 @@ const marketplaceSchema = Joi.object({
     "any.required": "Price is required",
   }),
   category: Joi.string().required().messages({
-    "string.empty": "category is required",
-  }),
-  city: Joi.string().required().messages({
-    "string.empty": "Location is required",
-  }),
-  category: Joi.string().required().messages({
     "string.empty": "Category is required",
   }),
+  city: Joi.string().required().messages({
+    "string.empty": "City is required",
+  }),
+  state: Joi.string().required().messages({
+    "string.empty": "State is required",
+  }),
   address: Joi.string().required().messages({
-    "string.empty": "address is required",
+    "string.empty": "Address is required",
   }),
   title: Joi.string().required().messages({
     "string.empty": "Title is required",
@@ -31,6 +31,7 @@ const marketplaceSchema = Joi.object({
     "string.empty": "Condition is required",
   }),
   images: Joi.optional(),
+  offers: Joi.optional(),
 });
 
 // Export middleware using common validation

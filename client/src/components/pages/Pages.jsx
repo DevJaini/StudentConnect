@@ -6,6 +6,8 @@ import Home from "../home/Home";
 import SignUp from "../signUp/SignUp";
 import SignIn from "../signIn/SignIn";
 import ForgotPassword from "../forgotPassword/ForgotPassword.jsx"; // Ensure consistent naming
+import Profile from "../profile/Profile.jsx";
+import ResetPassword from "../resetPassword/resetPassword.jsx";
 import Footer from "../common/footer/Footer";
 import Listings from "../listings/Listings.jsx";
 import AddListings from "../listings/addListing/AddListings.jsx";
@@ -33,17 +35,18 @@ const Pages = () => {
           <Route path="/signUp" element={<SignUp />} />
           <Route path="/signIn" element={<SignIn />} />
           <Route path="/forgotPassword" element={<ForgotPassword />} />
+          <Route path="/editProfile" element={<Profile />} />
+          <Route path="/resetPassword" element={<ResetPassword />} />
           <Route path="/listings" element={<Listings />} />
           <Route path="/addListings" element={<AddListings />} />
-          <Route path="/viewListing/:id" element={<ViewSingleListing />} />
+          <Route path="/viewListing" element={<ViewSingleListing />} />
           <Route path="/manageListings" element={<ManageListings />} />
-          <Route path="/editListing/:id" element={<EditListing />} />
-
+          <Route path="/editListing" element={<EditListing />} />
           <Route path="/marketplace" element={<Marketplace />} />
           <Route path="/addMarketplace" element={<AddMarketplace />} />
-          <Route path="/viewMarketplace/:id" element={<ViewMarketplace />} />
+          <Route path="/viewMarketplace" element={<ViewMarketplace />} />
           <Route path="/manageMarketplace" element={<ManageMarketplace />} />
-          <Route path="/editMarketplace/:id" element={<EditMarketplace />} />
+          <Route path="/editMarketplace" element={<EditMarketplace />} />
         </Routes>
 
         {/* Render the Footer outside of the Routes */}

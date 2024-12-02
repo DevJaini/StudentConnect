@@ -13,7 +13,7 @@ footer {
 }
 footer .container {
   display: grid;
-  grid-template-columns: 6fr 2fr 2fr 1fr;
+  grid-template-columns: 6fr 1fr 5fr;
   grid-gap: 20px;
 }
 footer img {
@@ -55,4 +55,49 @@ footer ul li {
   footer .container {
     grid-template-columns: repeat(2, 1fr);
   }
+}
+
+/* Contact Us Section */
+.contact-info {
+  padding: 20px;
+  border-radius: 8px;
+  margin: 10px 0;
+}
+
+.contact-info p {
+  margin: 5px 0;
+  font-size: 16px;
+}
+
+.contact-info strong {
+  font-size: 18px;
+  color: #ffffff;
+}
+
+/* For a more modern look, you can add icons next to the contact details */
+.contact-info p i {
+  margin-right: 10px;
+  color: #27ae60; /* Optional color for icons */
+}
+
+/* Social Media Links */
+.social-media {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 15px;
+  padding: 20px 0;
+}
+
+.social-media a {
+  text-decoration: none;
+  color: #27ae60; /* Facebook color */
+  font-size: 18px;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+/* Optionally, you can add icons for social media */
+.social-media a i {
+  margin-right: 8px; /* Space between icon and text */
 }

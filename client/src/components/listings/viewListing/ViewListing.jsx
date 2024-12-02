@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Slider from "react-slick"; // React Slick for slider
 import { viewListing } from "../../../api/listings";
-import { FaMapMarkerAlt, FaSchool } from "react-icons/fa";
+import { FaMapMarkerAlt, FaSchool, FaUser } from "react-icons/fa";
+import { useUser } from "../../../context/userContext.js"; // Import useUser hook
 import "./viewListing.css";
 
 // Custom arrow components
@@ -23,15 +24,18 @@ const PrevArrow = ({ className, style, onClick }) => (
 );
 
 const ViewSingleListing = () => {
-  const { id } = useParams();
+  const { user } = useUser(); // Access user info and logout function
+  const location = useLocation();
+  const { id } = location.state || {}; // Destructure id from state
+
   const [listing, setListing] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchListing = async () => {
       try {
-        const data = await viewListing(id);
-        setListing(data);
+        const data = await viewListing({ id });
+        setListing(data[0]);
       } catch (error) {
         console.error("Error fetching listing:", error);
         navigate("/"); // Navigate back to home on error
@@ -89,8 +93,7 @@ const ViewSingleListing = () => {
         <h1 className="listing-title">{listing.title}</h1>
         <div className="listing-location">
           <FaMapMarkerAlt className="location-icon" />
-          <span>{listing.address},</span>
-          <span>{listing.city}</span>
+          <span>{`${listing.address}, ${listing.city}, ${listing.state}`}</span>
         </div>
         <p className="listing-location">{listing.location}</p>
 
@@ -128,7 +131,7 @@ const ViewSingleListing = () => {
 
       {/* Description Section */}
       <div className="description-section">
-        <h2>About this property</h2>
+        <h3>About this property</h3>
         <p>{listing.description}</p>
       </div>
 
@@ -151,11 +154,16 @@ const ViewSingleListing = () => {
 
       {/* Contact Section */}
       <div className="contact-section">
+        <h3>Seller Information</h3>
+        <div className="seller-info">
+          <FaUser className="seller-icon" />
+          <span>&nbsp;&nbsp;{user.username}</span>
+        </div>
         <button
-          onClick={() => alert("Contacting owner...")}
+          onClick={() => alert("Contacting seller...")}
           className="contact-btn"
         >
-          Contact the Owner
+          Contact Seller
         </button>
       </div>
     </div>

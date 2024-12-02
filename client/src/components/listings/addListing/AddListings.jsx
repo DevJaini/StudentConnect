@@ -85,6 +85,9 @@ const AddListings = () => {
 
   return (
     <div className="add-property-container">
+      <button className="back-btn" onClick={() => navigate(-1)}>
+        &larr; Back to Listings
+      </button>
       <h2 className="center color">Add New Property</h2>
       {loading ? ( // Show spinner while loading
         <div className="spinner-container">
@@ -153,6 +156,7 @@ const AddListings = () => {
               name="price"
               value={formData.price}
               onChange={handleChange}
+              placeholder="(Only in numbers)"
               required
             />
           </label>
@@ -164,7 +168,7 @@ const AddListings = () => {
               name="size"
               value={formData.size}
               onChange={handleChange}
-              placeholder="e.g., 100"
+              placeholder="e.g., 100 (Only in numbers)"
               required
             />
           </label>
@@ -176,6 +180,7 @@ const AddListings = () => {
               name="bathrooms"
               value={formData.bathrooms}
               onChange={handleChange}
+              placeholder="(Only in numbers)"
               required
             />
           </label>
@@ -213,7 +218,7 @@ const AddListings = () => {
               name="type"
               value={formData.type}
               onChange={handleChange}
-              placeholder="e.g., 1 bed, Studio"
+              placeholder="e.g., 1 beds, Studio"
             />
           </label>
 
