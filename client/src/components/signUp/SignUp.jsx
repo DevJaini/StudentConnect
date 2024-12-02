@@ -42,9 +42,7 @@ const SignUp = () => {
       return;
     }
 
-    // setUser(user);
-    // Store username in context
-    navigate("/"); // Redirect to the home page upon successful sign-up
+    navigate("/signIn"); // Redirect to the home page upon successful sign-up
   };
 
   // Function to handle Google sign-up
@@ -58,7 +56,7 @@ const SignUp = () => {
       return;
     }
 
-    navigate("/"); // Redirect to the home page upon successful Google sign-up
+    navigate("/signIn"); // Redirect to the home page upon successful Google sign-up
   };
 
   return (

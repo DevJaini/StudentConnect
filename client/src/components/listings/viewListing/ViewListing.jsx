@@ -171,6 +171,3 @@ const ViewSingleListing = () => {
 };
 
 export default ViewSingleListing;
-
-//streamchat
-//userId from token
