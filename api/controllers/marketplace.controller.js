@@ -1,5 +1,6 @@
 import { supabase } from "../database/supabase.config.js";
 
+// Add a new item to the marketplace
 export const addMarketplaceItem = async (req, res) => {
   try {
     const { data, error } = await supabase.from("marketplace").insert(req.body);
@@ -14,10 +15,11 @@ export const addMarketplaceItem = async (req, res) => {
       data,
     });
   } catch (err) {
-    res.status(500).json({ error: "Server error", err });
+    res.status(500).json({ error: "Server error", details: err.message });
   }
 };
 
+// Retrieve all active (not archived) marketplace items for the dashboard
 export const dashboardViewMarketplaceItems = async (req, res) => {
   try {
     const { data, error } = await supabase
@@ -31,57 +33,55 @@ export const dashboardViewMarketplaceItems = async (req, res) => {
 
     return res.status(200).json(data);
   } catch (err) {
-    res.status(500).json({ error: "Server error", err });
+    res.status(500).json({ error: "Server error", details: err.message });
   }
 };
 
+// Retrieve marketplace items with dynamic filtering based on input
 export const viewMarketplaceItems = async (req, res) => {
   try {
     const input = req.body;
 
-    // Initialize the query
     let query = supabase.from("marketplace").select("*").eq("archived", false);
 
-    // Remove keys with empty string values from filters object
+    // Remove empty, null, or undefined keys from filters object
     const filters = Object.fromEntries(
       Object.entries(input).filter(
         ([key, value]) => value !== "" && value !== null && value !== undefined
       )
     );
+
+    // Apply price range filters if provided
     if (filters.priceMin) {
-      filters.priceMin = parseFloat(filters.priceMin); // Convert to number
+      filters.priceMin = parseFloat(filters.priceMin); // Ensure it's a number
       query = query.gte("price", filters.priceMin);
       delete filters.priceMin;
     }
 
     if (filters.priceMax) {
-      filters.priceMax = parseFloat(filters.priceMax); // Convert to number
+      filters.priceMax = parseFloat(filters.priceMax); // Ensure it's a number
       query = query.lte("price", filters.priceMax);
-
       delete filters.priceMax;
     }
 
-    // Dynamically apply filters only if provided
-    if (filters && Object.keys(filters).length > 0) {
-      for (const key in filters) {
-        query = query.eq(key, filters[key]);
-      }
+    // Apply other filters dynamically
+    for (const [key, value] of Object.entries(filters)) {
+      query = query.eq(key, value);
     }
 
-    // Execute the query
     const { data, error } = await query;
 
     if (error) {
       return res.status(400).json({ error: error.message });
     }
 
-    // Return the data
     return res.status(200).json(data);
   } catch (err) {
-    res.status(500).json({ error: "Server error", err });
+    res.status(500).json({ error: "Server error", details: err.message });
   }
 };
 
+// Update an existing marketplace item by its ID
 export const updateMarketplaceItem = async (req, res) => {
   const updates = req.body;
   const { id } = req.body;
@@ -90,7 +90,7 @@ export const updateMarketplaceItem = async (req, res) => {
     if (!id) {
       return res
         .status(400)
-        .json({ error: "Marketplace item Id is required!" });
+        .json({ error: "Marketplace item ID is required!" });
     }
 
     const { error } = await supabase
@@ -101,8 +101,12 @@ export const updateMarketplaceItem = async (req, res) => {
     if (error) {
       return res.status(400).json({ error: error.message });
     }
-    res.status(200).json({ success: true });
+
+    res.status(200).json({
+      success: true,
+      message: "Marketplace item updated successfully!",
+    });
   } catch (err) {
-    res.status(500).json({ error: "Server error", err });
+    res.status(500).json({ error: "Server error", details: err.message });
   }
 };

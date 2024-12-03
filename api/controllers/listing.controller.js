@@ -1,5 +1,6 @@
 import { supabase } from "../database/supabase.config.js";
 
+// Add a new listing to the "listings" table
 export const addListing = async (req, res) => {
   try {
     const { data, error } = await supabase.from("listings").insert(req.body);
@@ -8,14 +9,17 @@ export const addListing = async (req, res) => {
       return res.status(400).json({ error: error.message });
     }
 
-    res
-      .status(200)
-      .json({ success: true, message: "Listing added successfully!", data });
+    res.status(200).json({
+      success: true,
+      message: "Listing added successfully!",
+      data,
+    });
   } catch (err) {
-    res.status(500).json({ error: "Server error", err });
+    res.status(500).json({ error: "Server error", details: err.message });
   }
 };
 
+// Retrieve all active (not archived) listings for the dashboard
 export const dashboardViewListings = async (req, res) => {
   try {
     const { data, error } = await supabase
@@ -29,42 +33,37 @@ export const dashboardViewListings = async (req, res) => {
 
     return res.status(200).json(data);
   } catch (err) {
-    res.status(500).json({ error: "Server error", err });
+    res.status(500).json({ error: "Server error", details: err.message });
   }
 };
 
+// Retrieve listings with dynamic filtering
 export const viewListings = async (req, res) => {
   try {
     const input = req.body;
 
     let query = supabase.from("listings").select("*").eq("archived", false);
 
-    // Remove keys with empty string values from filters object
+    // Filter out empty, null, or undefined inputs
     const filters = Object.fromEntries(
       Object.entries(input).filter(
         ([key, value]) => value !== "" && value !== null && value !== undefined
       )
     );
 
+    // Apply range filters for price
     if (filters.priceMin) {
-      filters.priceMin = parseFloat(filters.priceMin); // Convert to number
-      query = query.gte("price", filters.priceMin);
-
+      query = query.gte("price", parseFloat(filters.priceMin));
       delete filters.priceMin;
     }
-
     if (filters.priceMax) {
-      filters.priceMax = parseFloat(filters.priceMax); // Convert to number
-      query = query.lte("price", filters.priceMax);
-
+      query = query.lte("price", parseFloat(filters.priceMax));
       delete filters.priceMax;
     }
 
-    // Dynamically apply filters only if provided
-    if (filters && Object.keys(filters).length > 0) {
-      for (const key in filters) {
-        query = query.eq(key, filters[key]);
-      }
+    // Dynamically apply other filters
+    for (const [key, value] of Object.entries(filters)) {
+      query = query.eq(key, value);
     }
 
     // Execute the query
@@ -74,20 +73,20 @@ export const viewListings = async (req, res) => {
       return res.status(400).json({ error: error.message });
     }
 
-    // Return the data
     return res.status(200).json(data);
   } catch (err) {
-    res.status(500).json({ error: "Server error", err });
+    res.status(500).json({ error: "Server error", details: err.message });
   }
 };
 
+// Update an existing listing by its ID
 export const updateListing = async (req, res) => {
   const updates = req.body;
   const { id } = req.body;
 
   try {
     if (!id) {
-      return res.status(400).json({ error: "Listing Id is required!" });
+      return res.status(400).json({ error: "Listing ID is required!" });
     }
 
     const { error } = await supabase
@@ -98,8 +97,11 @@ export const updateListing = async (req, res) => {
     if (error) {
       return res.status(400).json({ error: error.message });
     }
-    res.status(200).json({ success: true });
+
+    res
+      .status(200)
+      .json({ success: true, message: "Listing updated successfully!" });
   } catch (err) {
-    res.status(500).json({ error: "Server error", err });
+    res.status(500).json({ error: "Server error", details: err.message });
   }
 };

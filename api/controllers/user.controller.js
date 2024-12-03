@@ -3,11 +3,12 @@ import bcrypt from "bcrypt";
 import { generateToken } from "../middleware/jwt.middleware.js";
 import { sendOTPEmail } from "../services/otp.service.js";
 
-// Sign Up Controller
+// Add a new user to the studentconnect
 export const signUp = async (req, res) => {
   const { username, email, password } = req.body;
 
   try {
+    // Check if the email is already in use
     const { data } = await supabase
       .from("users")
       .select("*")
@@ -20,6 +21,7 @@ export const signUp = async (req, res) => {
         .json({ error: "A user with this email already exists." });
     }
 
+    // Hash the password before saving it
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const { error } = await supabase
@@ -41,7 +43,7 @@ export const signUp = async (req, res) => {
   }
 };
 
-// Sign In Controller
+//  Authentication of the user of studentconnect
 export const signIn = async (req, res) => {
   const { email, password } = req.body;
 
@@ -60,6 +62,7 @@ export const signIn = async (req, res) => {
       });
     }
 
+    // Validate the password
     const validPassword = await bcrypt.compare(password, user.password);
 
     if (!validPassword) {
@@ -70,6 +73,7 @@ export const signIn = async (req, res) => {
       });
     }
 
+    // Remove the password from the user object before sending the response
     delete user.password;
     user.token = generateToken(user);
 
@@ -90,7 +94,8 @@ export const getProfile = async (req, res) => {
 
   try {
     let query = supabase.from("users").select("*").eq("archived", false);
-    // Dynamically apply filters only if provided
+
+    // Dynamically apply filters if provided
     if (filters && Object.keys(filters).length > 0) {
       for (const key in filters) {
         query = query.eq(key, filters[key]);
@@ -105,7 +110,7 @@ export const getProfile = async (req, res) => {
         .json({ error: "User profile not found. Please check your details." });
     }
 
-    delete data.password;
+    delete data.password; // Remove sensitive data before sending
 
     res.status(200).json(data);
   } catch (err) {
@@ -116,6 +121,7 @@ export const getProfile = async (req, res) => {
   }
 };
 
+// Update User Profile Controller
 export const updateProfile = async (req, res) => {
   const id = req.user.userId;
 
@@ -126,6 +132,7 @@ export const updateProfile = async (req, res) => {
         .json({ error: "Id is required to fetch the profile." });
     }
 
+    // Update the user profile with the provided data
     const { error } = await supabase
       .from("users")
       .update(req.body)
@@ -144,10 +151,12 @@ export const updateProfile = async (req, res) => {
   }
 };
 
+// Forgot Password Controller
 export const forgotPassword = async (req, res) => {
   const { email } = req.body;
 
   try {
+    // Find the user by email
     const { data: user, error } = await supabase
       .from("users")
       .select("*")
@@ -160,6 +169,7 @@ export const forgotPassword = async (req, res) => {
       });
     }
 
+    // Send OTP to the user's email for password reset
     const otp = await sendOTPEmail(email);
 
     res.status(200).json({ message: "OTP sent to your email!", otp });
@@ -173,6 +183,7 @@ export const updatePassword = async (req, res) => {
   const { email, password } = req.body;
 
   try {
+    // Retrieve user by email
     const { data: user, error } = await supabase
       .from("users")
       .select("*")
@@ -185,9 +196,10 @@ export const updatePassword = async (req, res) => {
       });
     }
 
+    // Hash the new password before updating
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Update the password in the database
+    // Update the user's password in the database
     const { error: updateError } = await supabase
       .from("users")
       .update({ password: hashedPassword })
@@ -205,11 +217,13 @@ export const updatePassword = async (req, res) => {
   }
 };
 
+// Reset Password using Old and New Password Controller
 export const resetPassword = async (req, res) => {
   const { oldPassword, newPassword } = req.body;
   const id = req.user.userId;
 
   try {
+    // Retrieve user by ID
     const { data, error } = await supabase
       .from("users")
       .select("*")
@@ -222,6 +236,7 @@ export const resetPassword = async (req, res) => {
         .json({ error: "User profile not found. Please check your details." });
     }
 
+    // Compare the old password with the stored password
     const validPassword = await bcrypt.compare(oldPassword, data.password);
 
     if (!validPassword) {
@@ -231,6 +246,7 @@ export const resetPassword = async (req, res) => {
       });
     }
 
+    // Hash the new password before updating
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
     // Update the password in the database
@@ -254,6 +270,7 @@ export const resetPassword = async (req, res) => {
 // Google OAuth Sign In Controller
 export const googleSignIn = async (req, res) => {
   try {
+    // Initiate Google OAuth sign-in
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
     });
