@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Slider from "react-slick"; // React Slick for slider
 import { viewListing } from "../../../api/listings";
-import { FaMapMarkerAlt, FaSchool, FaUser } from "react-icons/fa";
-import { useUser } from "../../../context/userContext.js"; // Import useUser hook
+import { FaMapMarkerAlt, FaSchool } from "react-icons/fa";
+import { useChat } from "../../../context/ChatContext"; // Assuming useChat context
 import "./viewListing.css";
+import { getProfile } from "../../../api/user.js";
 
 // Custom arrow components
 const NextArrow = ({ className, style, onClick }) => (
@@ -24,12 +25,12 @@ const PrevArrow = ({ className, style, onClick }) => (
 );
 
 const ViewSingleListing = () => {
-  const { user } = useUser(); // Access user info and logout function
   const location = useLocation();
   const { id } = location.state || {}; // Destructure id from state
 
   const [listing, setListing] = useState(null);
   const navigate = useNavigate();
+  const { addChat } = useChat(); // Assume you have a function to add a new chat in the context
 
   useEffect(() => {
     const fetchListing = async () => {
@@ -59,6 +60,30 @@ const ViewSingleListing = () => {
     autoplaySpeed: 3000,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
+  };
+
+  const handleContactSeller = async () => {
+    const userProfile = await getProfile({ id: listing.user_id }); // Call your common getProfile function
+
+    addChat(
+      `listing-${listing.id}-${userProfile[0].id}`,
+      listing,
+      userProfile[0].id,
+      userProfile[0].username,
+      "listing",
+      []
+    ); // Add this chat to the context or local state
+
+    // Navigate to the chat page for this specific chat
+    navigate(`/chat`, {
+      state: {
+        item: listing,
+        itemId: listing.id,
+        sellerId: userProfile[0].id,
+        sellerName: userProfile[0].username,
+        itemType: "listing",
+      },
+    });
   };
 
   return (
@@ -154,15 +179,7 @@ const ViewSingleListing = () => {
 
       {/* Contact Section */}
       <div className="contact-section">
-        <h3>Seller Information</h3>
-        <div className="seller-info">
-          <FaUser className="seller-icon" />
-          <span>&nbsp;&nbsp;{user.username}</span>
-        </div>
-        <button
-          onClick={() => alert("Contacting seller...")}
-          className="contact-btn"
-        >
+        <button className="btn" onClick={handleContactSeller}>
           Contact Seller
         </button>
       </div>

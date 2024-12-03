@@ -8,8 +8,8 @@ export const signIn = async (data) => {
   return await apiRequest("POST", "/user/signIn", data);
 };
 
-export const getProfile = async () => {
-  return await apiRequest("GET", "/user/getProfile");
+export const getProfile = async (data) => {
+  return await apiRequest("POST", "/user/getProfile", data);
 };
 
 export const updateProfile = async (data) => {

@@ -18,10 +18,6 @@ const signUpSchema = Joi.object({
     "string.min": "Password must be at least 5 characters long",
     "string.empty": "Password is required",
   }),
-  confirmPassword: Joi.any().valid(Joi.ref("password")).required().messages({
-    "any.only": "Confirm Password do not match Password",
-    "any.required": "Confirm Password is required",
-  }),
 });
 
 const signInSchema = Joi.object({
@@ -64,10 +60,6 @@ const updatePasswordSchema = Joi.object({
   password: Joi.string().min(5).required().messages({
     "string.min": "Password must be at least 5 characters long",
     "string.empty": "Password is required",
-  }),
-  confirmPassword: Joi.any().valid(Joi.ref("password")).required().messages({
-    "any.only": "Confirm Password do not match Password",
-    "any.required": "Confirm Password is required",
   }),
 });
 

@@ -20,23 +20,24 @@ const SignIn = () => {
     setLoading(true);
     setErrorMessage("");
 
-    const { user, error } = await signIn({
-      email,
-      password,
-    });
+    try {
+      const response = await signIn({
+        email,
+        password,
+      }); // Call the signUp API
 
-    setLoading(false);
-
-    if (error) {
-      setErrorMessage(error.message);
-
-      return;
+      if (response.success) {
+        setLoading(false);
+        // Store token in localStorage
+        localStorage.setItem("authToken", response.user.token);
+        setUser(response.user); // Store username in context
+        navigate("/"); // Navigate to sign-in page on success
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error("Sign-up error:", error);
+      setErrorMessage(error.errors); // Set errors directly as an array
     }
-
-    // Store token in localStorage
-    localStorage.setItem("authToken", user.token);
-    setUser(user); // Store username in context
-    navigate("/");
   };
 
   // Function to handle Google sign-in
@@ -83,7 +84,17 @@ const SignIn = () => {
           </Link>
           <br />
           <br />
-          {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}{" "}
+          {errorMessage && (
+            <ul
+              style={{
+                color: "red",
+              }}
+            >
+              {errorMessage.map((msg, idx) => (
+                <li key={idx}>{msg}</li>
+              ))}
+            </ul>
+          )}{" "}
           {/* Display error message */}
           <button type="submit" disabled={loading}>
             {" "}

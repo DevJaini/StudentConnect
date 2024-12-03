@@ -15,9 +15,9 @@ const Profile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const userProfile = await getProfile(); // Call your common getProfile function
-        setName(userProfile.username || ""); // Set name
-        setEmail(userProfile.email || ""); // Set email
+        const userProfile = await getProfile({ id: user.id }); // Call your common getProfile function
+        setName(userProfile[0].username || ""); // Set name
+        setEmail(userProfile[0].email || ""); // Set email
       } catch (error) {
         console.error("Error fetching profile:", error);
       }

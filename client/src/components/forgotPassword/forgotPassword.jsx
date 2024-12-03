@@ -72,7 +72,6 @@ const ForgotPassword = () => {
       const response = await updatePassword({
         email,
         password,
-        confirmPassword,
       }); // Call API to update password
       setLoading(false);
 

@@ -30,7 +30,9 @@ export const signUp = async (req, res) => {
       return res.status(400).json({ error: error.message });
     }
 
-    res.status(200).json({ message: "Account created successfully!", data });
+    res
+      .status(200)
+      .json({ success: true, message: "Account created successfully!", data });
   } catch (err) {
     res.status(500).json({
       error: "An internal server error occurred. Please try again later.",
@@ -52,8 +54,9 @@ export const signIn = async (req, res) => {
 
     if (error || !user) {
       return res.status(400).json({
-        error:
+        errors: [
           "No account found with this email. Please check your email or sign up.",
+        ],
       });
     }
 
@@ -61,15 +64,18 @@ export const signIn = async (req, res) => {
 
     if (!validPassword) {
       return res.status(400).json({
-        error:
+        errors: [
           "Incorrect password. Please check your credentials and try again.",
+        ],
       });
     }
 
     delete user.password;
     user.token = generateToken(user);
 
-    res.status(200).json({ message: "Logged in successfully!", user });
+    res
+      .status(200)
+      .json({ success: true, message: "Logged in successfully!", user });
   } catch (err) {
     res.status(500).json({
       error: "An internal server error occurred. Please try again later.",
@@ -80,20 +86,18 @@ export const signIn = async (req, res) => {
 
 // Get User Profile Controller
 export const getProfile = async (req, res) => {
-  const id = req.user.userId;
+  const filters = req.body;
 
   try {
-    if (!id) {
-      return res
-        .status(400)
-        .json({ error: "Id is required to fetch the profile." });
+    let query = supabase.from("users").select("*").eq("archived", false);
+    // Dynamically apply filters only if provided
+    if (filters && Object.keys(filters).length > 0) {
+      for (const key in filters) {
+        query = query.eq(key, filters[key]);
+      }
     }
 
-    const { data, error } = await supabase
-      .from("users")
-      .select("*")
-      .eq("id", id)
-      .single();
+    const { data, error } = await query;
 
     if (error || !data) {
       return res

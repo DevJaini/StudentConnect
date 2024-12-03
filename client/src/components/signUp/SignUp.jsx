@@ -2,127 +2,138 @@ import React, { useState } from "react";
 import "./signUp.css";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "../../supabase/supabaseClient";
-import { signUp } from "../../api/user.js"; // Assuming you have a signUp API similar to signIn
-// import { useUser } from "../../context/userContext.js";
+import { signUp } from "../../api/user.js"; // Assuming you have a signUp API
 
 const SignUp = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState(""); // State for confirm password
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  // const { setUser } = useUser();
 
-  // Function to handle email/password sign-up
   const handleSignUp = async (e) => {
-    e.preventDefault(); // Prevent default form submission
+    e.preventDefault();
+    setErrorMessage("");
 
     // Validate password and confirm password
     if (password !== confirmPassword) {
-      setErrorMessage("Passwords do not match");
+      setErrorMessage(["Passwords do not match."]);
       return;
     }
 
-    setLoading(true); // Set loading state to true
-    setErrorMessage("");
+    setLoading(true); // Start loading spinner
 
-    const { error } = await signUp({
-      username,
-      email,
-      password,
-      confirmPassword,
-    });
+    try {
+      const response = await signUp({
+        username,
+        email,
+        password,
+      }); // Call the signUp API
 
-    setLoading(false);
-
-    if (error) {
-      setErrorMessage(error.message); // Display error message
-      return;
+      if (response.success) {
+        setLoading(false);
+        navigate("/signIn"); // Navigate to sign-in page on success
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error("Sign-up error:", error.errors);
+      setErrorMessage(error.errors); // Set errors directly as an array
     }
-
-    navigate("/signIn"); // Redirect to the home page upon successful sign-up
   };
 
-  // Function to handle Google sign-up
   const handleGoogleSignUp = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-    });
+    setErrorMessage("");
+    setLoading(true);
 
-    if (error) {
-      setErrorMessage(error.message); // Display error message
-      return;
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+      });
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      navigate("/signIn"); // Navigate to sign-in page on success
+    } catch (error) {
+      setLoading(false);
+
+      // Log and display a meaningful error message
+      console.error("Google sign-up error:", error);
+      setErrorMessage(
+        error.message || "Google sign-up failed. Please try again."
+      );
     }
-
-    navigate("/signIn"); // Redirect to the home page upon successful Google sign-up
   };
 
   return (
-    <>
-      <section className="signUp mb center signUp-container">
-        <div className="container">
-          <form className="shadow" onSubmit={handleSignUp}>
-            <h2 className="color">Create an account</h2>
-            Or,&nbsp;
-            <Link to="/signIn" style={{ textDecoration: "underline" }}>
-              Sign into your account
-            </Link>
-            <br />
-            <br />
-            <input
-              type="text"
-              placeholder="Full Name"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)} // Update fullName state
-              required
-            />
-            <input
-              type="email"
-              placeholder="Email Address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)} // Update email state
-              required
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)} // Update password state
-              required
-            />
-            <input
-              type="password"
-              placeholder="Confirm Password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)} // Update confirmPassword state
-              required
-            />
-            <br />
-            {errorMessage && (
-              <p style={{ color: "red" }}>{errorMessage}</p>
-            )}{" "}
-            {/* Display error message */}
-            <button type="submit" disabled={loading}>
-              {loading ? "Signing Up..." : "Sign Up"}
-            </button>
-            <br />
-            <h4 style={{ color: "gray" }}>
-              ------------------------- OR -------------------------
-            </h4>
-            <br />
-            <button
-              type="button"
-              onClick={handleGoogleSignUp}
-              disabled={loading}
+    <section className="signUp mb center signUp-container">
+      <div className="container">
+        <form className="shadow" onSubmit={handleSignUp}>
+          <h2 className="color">Create an account</h2>
+          Or,&nbsp;
+          <Link to="/signIn" style={{ textDecoration: "underline" }}>
+            Sign into your account
+          </Link>
+          <br />
+          <br />
+          <input
+            type="text"
+            placeholder="Full Name"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <input
+            type="email"
+            placeholder="Email Address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
+          <br />
+          {errorMessage && (
+            <ul
+              style={{
+                color: "red",
+              }}
             >
-              {loading ? "Signing Up with Google..." : "Sign Up with Google"}
-            </button>
-          </form>
-        </div>
-      </section>
-    </>
+              {errorMessage.map((msg, idx) => (
+                <li key={idx}>{msg}</li>
+              ))}
+            </ul>
+          )}{" "}
+          {/* Display error message */}
+          <button type="submit" disabled={loading}>
+            {loading ? "Signing Up..." : "Sign Up"}
+          </button>
+          <br />
+          <h4 style={{ color: "gray" }}>
+            ------------------------- OR -------------------------
+          </h4>
+          <br />
+          <button type="button" onClick={handleGoogleSignUp} disabled={loading}>
+            {loading ? "Signing Up with Google..." : "Sign Up with Google"}
+          </button>
+        </form>
+      </div>
+    </section>
   );
 };
 

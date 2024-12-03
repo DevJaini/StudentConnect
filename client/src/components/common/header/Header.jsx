@@ -13,6 +13,10 @@ const Header = () => {
     navigate("/"); // Redirect to home or login page
   };
 
+  const handleChatClick = () => {
+    navigate("/chatHistory"); // Redirect to the chat page
+  };
+
   return (
     <>
       <header className="header">
@@ -30,6 +34,9 @@ const Header = () => {
                 <Link to="/editProfile">
                   <button className="btn btn-signout">Edit Profile</button>
                 </Link>
+                <button className="btn btn-signout" onClick={handleChatClick}>
+                  Chat
+                </button>{" "}
                 <button className="btn btn-signout" onClick={handleLogout}>
                   Sign Out
                 </button>

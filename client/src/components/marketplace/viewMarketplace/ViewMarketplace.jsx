@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Slider from "react-slick"; // React Slick for slider
 import { viewMarketplaceItem } from "../../../api/marketplace"; // Replace API function
-import { FaMapMarkerAlt, FaUser } from "react-icons/fa"; // Change icons if needed
-import { useUser } from "../../../context/userContext.js"; // Import useUser hook
+import { FaMapMarkerAlt } from "react-icons/fa"; // Change icons if needed
+import { useChat } from "../../../context/ChatContext"; // Assuming useChat context
+
 import "./viewMarketplace.css";
+import { getProfile } from "../../../api/user.js";
 
 // Custom arrow components
 const NextArrow = ({ className, style, onClick }) => (
@@ -28,7 +30,7 @@ const ViewMarketplace = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { id } = location.state || {}; // Destructure id from state
-  const { user } = useUser(); // Access user info and logout function
+  const { addChat } = useChat(); // Assume you have a function to add a new chat in the context
 
   useEffect(() => {
     const fetchItem = async () => {
@@ -58,6 +60,31 @@ const ViewMarketplace = () => {
     autoplaySpeed: 3000,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
+  };
+
+  const handleContactSeller = async () => {
+    // Create or update the chat based on listing and seller
+    const userProfile = await getProfile({ id: item.user_id }); // Call your common getProfile function
+
+    addChat(
+      `marketplace-${item.id}-${userProfile[0].id}`,
+      item,
+      userProfile[0].id,
+      userProfile[0].username,
+      "marketplace",
+      []
+    ); // Add this chat to the context or local state
+
+    // Navigate to the chat page for this specific chat
+    navigate(`/chat`, {
+      state: {
+        item: item,
+        itemId: item.id,
+        sellerId: userProfile[0].id,
+        sellerName: userProfile[0].username,
+        itemType: "marketplace",
+      },
+    });
   };
 
   return (
@@ -118,15 +145,7 @@ const ViewMarketplace = () => {
 
       {/* Contact Section */}
       <div className="contact-section">
-        <h3>Seller Information</h3>
-        <div className="seller-info">
-          <FaUser className="seller-icon" />
-          <span>&nbsp;&nbsp;{user.username}</span>
-        </div>
-        <button
-          onClick={() => alert("Contacting seller...")}
-          className="contact-btn"
-        >
+        <button className="btn" onClick={handleContactSeller}>
           Contact Seller
         </button>
       </div>
