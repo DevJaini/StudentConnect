@@ -1,6 +1,4 @@
-Here's a polished version of your **README** file for **StudentConnect**. It is structured and formatted to be clear, professional, and easy to read:
 
----
 
 # **StudentConnect**  
 **Find shared spaces, explore student deals, and discover what's around you — all in one place.**
