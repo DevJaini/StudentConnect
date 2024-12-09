@@ -196,10 +196,11 @@ const EditListing = () => {
           <label>
             Bathrooms:*
             <input
-              type="number"
+              type="text"
               name="bathrooms"
               value={formData.bathrooms}
               onChange={handleChange}
+              placeholder="e.g., 1 Bath"
               required
             />
           </label>

@@ -95,10 +95,6 @@ const ManageMarketplace = () => {
                   />
                   {item.city}
                 </p>
-                <p>
-                  <FaHome style={{ color: "#27ae60", marginRight: "5px" }} />
-                  {item.type}
-                </p>
               </div>
               <p>Price: ${item.price}</p>
 

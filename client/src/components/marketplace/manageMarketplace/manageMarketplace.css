@@ -49,7 +49,7 @@
 
 .marketplace-card img {
   width: 100%;
-  height: 150px;
+  height: 500px;
   object-fit: cover;
   border-bottom: 1px solid #ddd;
 }

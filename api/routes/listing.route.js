@@ -6,7 +6,7 @@ import {
   dashboardViewListings,
   updateListing,
 } from "../controllers/listing.controller.js";
-import { validateListing } from "../validations/listing.middleware.js";
+import { validateListing } from "../validations/listing.validation.js";
 import { uploadService, uploadToSupabase } from "../services/multer.service.js";
 
 const router = express.Router();

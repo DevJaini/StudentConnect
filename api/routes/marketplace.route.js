@@ -7,7 +7,7 @@ import {
   updateMarketplaceItem,
 } from "../controllers/marketplace.controller.js";
 import { uploadService, uploadToSupabase } from "../services/multer.service.js";
-import { validateMarketplace } from "../validations/marketplace.middleware.js";
+import { validateMarketplace } from "../validations/marketplace.validation.js";
 
 const router = express.Router();
 

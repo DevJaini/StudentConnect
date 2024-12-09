@@ -165,7 +165,7 @@ const EditMarketplace = () => {
           <label>
             Price:*
             <input
-              type="number"
+              type="float"
               name="price"
               value={formData.price}
               onChange={handleChange}

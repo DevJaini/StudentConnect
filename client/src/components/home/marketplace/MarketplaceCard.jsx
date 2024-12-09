@@ -38,7 +38,7 @@ const MarketPlaceCard = () => {
     <>
       <div className="content grid3 mtop">
         {marketplaceItems.map((item) => {
-          const { id, category, location, title, price, condition, images } =
+          const { id, category, city, state, title, price, condition, images } =
             item;
           return (
             <div className="box shadow" key={id}>
@@ -67,7 +67,7 @@ const MarketPlaceCard = () => {
                 </div>
                 <h4>{title}</h4>
                 <p>
-                  <i className="fa fa-location-dot"></i> {location}
+                  <i className="fa fa-location-dot"></i> {city}, {state}
                 </p>
               </div>
               <div className="button flex">

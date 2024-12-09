@@ -21,6 +21,7 @@ const AddListings = () => {
     offers: "",
     fees_policies: "",
     images: [], // Store image files here
+    user_id: 0,
   });
 
   const [loading, setLoading] = useState(false); // Loading state
@@ -33,6 +34,7 @@ const AddListings = () => {
     setFormData({
       ...formData,
       [name]: value,
+      user_id: user.id,
     });
   };
 
@@ -63,9 +65,6 @@ const AddListings = () => {
     formData.images.forEach((image) => {
       data.append("images", image); // Append images
     });
-
-    // Append the user ID (retrieved from the context) to the data
-    data.append("user_id", user.id); // Assuming `user.id` gives the logged-in user's ID
 
     try {
       const response = await addListing(data); // Send the FormData object using the API function
@@ -176,11 +175,11 @@ const AddListings = () => {
           <label>
             Bathrooms:*
             <input
-              type="float"
+              type="text"
               name="bathrooms"
               value={formData.bathrooms}
               onChange={handleChange}
-              placeholder="(Only in numbers)"
+              placeholder="e.g., 1 Bath"
               required
             />
           </label>

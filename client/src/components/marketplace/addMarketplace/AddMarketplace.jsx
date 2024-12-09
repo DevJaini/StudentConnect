@@ -16,6 +16,7 @@ const AddMarketplace = () => {
     condition: "",
     offers: "",
     images: [], // Store image files here
+    user_id: 0,
   });
 
   const [loading, setLoading] = useState(false); // Loading state
@@ -28,6 +29,7 @@ const AddMarketplace = () => {
     setFormData({
       ...formData,
       [name]: value,
+      user_id: user.id,
     });
   };
 
@@ -58,9 +60,6 @@ const AddMarketplace = () => {
     formData.images.forEach((image) => {
       data.append("images", image); // Append images
     });
-
-    // Append the user ID (retrieved from the context) to the data
-    data.append("user_id", user.id); // Assuming `user.id` gives the logged-in user's ID
 
     try {
       const response = await addMarketplaceItem(data); // Send the FormData object using the API function
@@ -115,7 +114,7 @@ const AddMarketplace = () => {
           <label>
             Price:*
             <input
-              type="number"
+              type="float"
               name="price"
               value={formData.price}
               onChange={handleChange}
@@ -213,6 +212,9 @@ const AddMarketplace = () => {
               placeholder="e.g., Discounts, Free Delivery"
             />
           </label>
+
+          {/* Hidden input for user_id (retrieved from the user context) */}
+          <input type="hidden" name="user_id" value={user.id} />
 
           <button type="submit" className="submit-btn">
             Add Item

@@ -28,7 +28,7 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 300px; /* Fixed height for consistent sizing */
+  height: 700px; /* Fixed height for consistent sizing */
   overflow: hidden;
   border-radius: 10px;
   background-color: rgba(38, 174, 96, 0.2); /* Light shade of the green color */

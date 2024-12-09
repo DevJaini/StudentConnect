@@ -38,7 +38,8 @@ const RecentCard = () => {
     <>
       <div className="content grid3 mtop">
         {properties.map((property) => {
-          const { id, category, city, title, price, type, images } = property;
+          const { id, category, city, state, title, price, type, images } =
+            property;
           return (
             <div className="box shadow" key={id}>
               {/* Display the first image */}
@@ -66,7 +67,7 @@ const RecentCard = () => {
                 </div>
                 <h4>{title}</h4>
                 <p>
-                  <i className="fa fa-location-dot"></i> {city}
+                  <i className="fa fa-location-dot"></i> {city}, {state}
                 </p>
               </div>
               <div className="button flex">
