@@ -21,7 +21,7 @@
 
 ## **Core Features**  
 1. **Student Dashboard**:  
-   Personalized dashboards for managing activities and resources.
+   - Personalized dashboards for managing activities and resources.
 
 2. **Apartment Listings**:  
    - Share and discover apartment listings.  
@@ -56,7 +56,7 @@
 ## **How to Get Started**  
 1. Clone the repository:  
    ```bash
-   git clone https://github.com/DevJaini/StudentConnect.git
+    git clone https://github.com/DevJaini/StudentConnect.git
    ```
 2. Install dependencies for both frontend and backend:  
 
@@ -78,16 +78,19 @@ Backend:
    - **Frontend**: Add API base URL in the `.env` file.  
 
 5. Start the development servers:  
-   ```bash
---backend--
-   cd api
-   node server.js
 
---frontend--
+
+Frontend:
+  ```bash
    cd client
    npm start
-   ```
+  ```
 
+Backend:
+  ```bash
+   cd api
+   node server.js
+   ```
 ---
 
 ## **Contact Information**  
