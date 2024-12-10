@@ -1,4 +1,3 @@
-import React from "react";
 import { featured } from "../../data/Data";
 
 const FeaturedCard = () => {

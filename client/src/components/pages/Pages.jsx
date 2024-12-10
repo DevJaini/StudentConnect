@@ -1,7 +1,6 @@
 import React from "react";
 import { UserProvider } from "../../context/userContext.js"; // Correct path casing
 import { ChatProvider } from "../../context/chatContext.js"; // Correct path casing
-
 import { Routes, Route } from "react-router-dom";
 import Header from "../common/header/Header";
 import Home from "../home/Home";

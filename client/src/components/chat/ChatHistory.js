@@ -8,7 +8,7 @@ import "./chat.css";
 const ChatHistory = () => {
   const { chats } = useChat();
   const { user } = useUser();
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   const userChats = chats.filter(
     (chat) =>
