@@ -5,7 +5,7 @@ import {
 } from "../../../api/marketplace"; // API calls to get marketplace marketplaces and archive them
 import { useUser } from "../../../context/userContext"; // Accessing user context
 import { useNavigate } from "react-router-dom";
-import { FaMapMarkerAlt, FaHome } from "react-icons/fa"; // Icons for location and type
+import { FaMapMarkerAlt } from "react-icons/fa"; // Icons for location and type
 import "./manageMarketplace.css";
 
 const ManageMarketplace = () => {

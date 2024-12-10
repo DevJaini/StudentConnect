@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Slider from "react-slick"; // React Slick for slider
 import { viewListing } from "../../../api/listings";
 import { FaMapMarkerAlt, FaSchool } from "react-icons/fa";
-import { useChat } from "../../../context/ChatContext"; // Assuming useChat context
+import { useChat } from "../../../context/chatContext.js"; // Assuming useChat context
 import "./viewListing.css";
 import { getProfile } from "../../../api/user.js";
 

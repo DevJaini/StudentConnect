@@ -1,5 +1,5 @@
 import React from "react";
-import { useChat } from "../../context/ChatContext";
+import { useChat } from "../../context/chatContext";
 import { useUser } from "../../context/userContext";
 import ChatMessage from "./ChatMessage";
 import { useNavigate } from "react-router-dom"; // Import useNavigate

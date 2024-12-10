@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useChat } from "../../context/ChatContext";
+import { useChat } from "../../context/chatContext";
 import { useUser } from "../../context/userContext"; // Assuming you have this context
 import "./chat.css";
 

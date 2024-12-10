@@ -208,10 +208,10 @@ export const updatePassword = async (req, res) => {
     if (updateError) {
       return res
         .status(400)
-        .json({ error: "Unable to reset password. Please try again." });
+        .json({ error: "Unable to update password. Please try again." });
     }
 
-    res.status(200).json({ message: "Password reset successful!" });
+    res.status(200).json({ message: "Password update successful!" });
   } catch (err) {
     res.status(500).json({ error: "Server error", details: err.message });
   }

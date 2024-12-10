@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Slider from "react-slick"; // React Slick for slider
 import { viewMarketplaceItem } from "../../../api/marketplace"; // Replace API function
 import { FaMapMarkerAlt } from "react-icons/fa"; // Change icons if needed
-import { useChat } from "../../../context/ChatContext"; // Assuming useChat context
+import { useChat } from "../../../context/chatContext.js"; // Assuming useChat context
 
 import "./viewMarketplace.css";
 import { getProfile } from "../../../api/user.js";

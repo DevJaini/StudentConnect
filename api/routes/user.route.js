@@ -15,7 +15,7 @@ import {
   validateSignIn,
   validateForgotPassword,
   validateUpdatePassword,
-} from "../validations/user.middleware.js";
+} from "../validations/user.validation.js";
 
 const router = express.Router();
 
