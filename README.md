@@ -1,16 +1,22 @@
 # StudentConnect
 
 ## Introduction  
-StudentConnect is a web-based platform designed to connect students for collaborative activities, marketplace listings, and communication. It provides features like event listings, chat functionality, and resource sharing to enhance student engagement and accessibility.
+StudentConnect is a web-based platform designed to connect students for marketplace and listings. It provides features like chat functionality.
 
 ## Features  
 - **Listings & Marketplace**: Users can create, browse, and manage marketplace items, apartment listings.  
 - **Chat System**: A built-in chat feature for direct communication between users, especially for listing inquiries.  
 - **Profile Management**: Users can create and manage their profiles, enabling better interaction and personalized content.
 
-## Technologies Used  
-- **Frontend**: React.js  
-- **Backend**: Node.js, Express  
+## Frontend  
+- **Frontend Framework**: React.js  
+- **UI Library**: Material-UI for styling  
+- **Client Routing**: React Router  
+- **State Management**: React Context API  
+- **Components**: Functional components and hooks for a responsive, dynamic user experience.
+
+## Backend  
+- **Framework**: Node.js, Express  
 - **Database**: Supabase  
 - **Authentication**: JWT (JSON Web Tokens)  
 
@@ -18,26 +24,53 @@ StudentConnect is a web-based platform designed to connect students for collabor
 - Node.js and npm must be installed on your local machine.  
 - A GitHub account to clone and manage the repository.  
 
-## Getting Started  
+---
+
+## **Backend Setup & Run**  
 1. **Clone the Repository**  
    ```bash  
    git clone https://github.com/your-username/studentconnect.git  
    cd studentconnect  
    ```  
-2. **Install Dependencies**  
+2. **Navigate to the backend folder**  
+   ```bash  
+   cd api  
+   ```  
+3. **Install Backend Dependencies**  
    ```bash  
    npm install  
    ```  
-3. **Setup Environment Variables**  
-   - Create a `.env` file in the root directory.  
+4. **Setup Environment Variables**  
+   - Create a `.env` file in the backend directory.  
    - Add your environment variables (e.g., database URL, JWT secret).  
    ```env  
    JWT_SECRET=your-jwt-secret  
+   SUPABASE_URL=your-supabase-url  
+   SUPABASE_ANON_KEY=your-supabase-anon-key  
    ```  
-4. **Run the Backend Server**  
+5. **Run the Backend Server**  
    ```bash  
-   npm run dev  
+   node server.js  
    ```  
+
+---
+
+## **Frontend Setup & Run**  
+1. **Navigate to the frontend folder**  
+   ```bash  
+   cd client  
+   ```  
+2. **Install Frontend Dependencies**  
+   ```bash  
+   npm install  
+   ```  
+3. **Run the Frontend**  
+   ```bash  
+   npm start  
+   ```  
+   - The frontend will be available at `http://localhost:3000`.
+
+---
 
 ## Usage  
 - **Profile Setup**: Users can create/edit their profiles for a personalized experience.  
@@ -51,7 +84,5 @@ Thank you to my professor, Ray Toal, for guidance and support throughout the dev
 
 ## Project Details  
 **Project Name**: StudentConnect  
-**Developer**: Jaini Shah  
+**Developer**: Jaini Shah   
 **Version**: 1.0  
-
----
